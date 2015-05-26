@@ -237,6 +237,7 @@ public class InformesActivity extends Activity {
             @Override
             public void onClick(View v) {
                 ProgressDialogAsync pd = new ProgressDialogAsync(InformesActivity.this);
+                pd.execute();
             }
         });
 
