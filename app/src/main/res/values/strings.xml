@@ -92,6 +92,7 @@
     <string name="AyudaRegistros">Registros periódicos, que se añaden a la lista de movimientos a partir de la fecha de activación del registro.</string>
     <string name="AyudaOpciones">Crea categorías, ponle una contraseña a tu app o crear copias de tu base de datos entre otras opciones.</string>
     <string name="ConjuncionSemana">al</string>
+    <string name="Creando">Creando...</string>
     <!-- MENSAJES TOAST -->
     <string name="Eliminado">¡Eliminado!</string>
     <string name="No_Eliminado">No se ha podido eliminar</string>

@@ -3,13 +3,19 @@ package globalsolutions.findemes.pantallas.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,9 +30,12 @@ import com.itextpdf.text.Document;
 
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,6 +45,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.mail.MessagingException;
+import javax.mail.Transport;
 
 import globalsolutions.findemes.R;
 import globalsolutions.findemes.database.dao.MovimientoDAO;
@@ -201,9 +213,6 @@ public class InformesActivity extends Activity {
                                 double[] valoresGastos = new double[count];
                                 String[] ejeX = new String[count];
                                 for(int i = 0 ; i < count ; i++){
-                                    /*valoresIngresos[i] = Double.valueOf(informes.get(count-i-1).getIngresoValor());
-                                    valoresGastos[i] = Double.valueOf(informes.get(count-i-1).getGastoValor());
-                                    ejeX[i] = informes.get(count-i-1).getPeriodoDesc();*/
                                     valoresIngresos[i] = Double.valueOf(informes.get(i).getIngresoValor());
                                     valoresGastos[i] = Double.valueOf(informes.get(i).getGastoValor());
                                     ejeX[i] = informes.get(i).getPeriodoDesc();
@@ -227,35 +236,7 @@ public class InformesActivity extends Activity {
         btnExportarPDF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Creamos el documento.
-                Document documento = new Document();
-                try {
-                    // Creamos el fichero con el nombre que deseemos.
-                    File f = crearFichero("prueba.pdf");
-                    if(f != null) {
-                        // Creamos el flujo de datos de salida para el fichero donde guardaremos el pdf.
-                        FileOutputStream ficheroPdf = new FileOutputStream(f.getAbsolutePath());
-                        // Asociamos el flujo que acabamos de crear al documento.
-                        PdfWriter.getInstance(documento, ficheroPdf);
-                        // Abrimos el documento.
-                        documento.open();
-                        // titulo con una fuente personalizada.
-                        Font font = FontFactory.getFont(FontFactory.HELVETICA, 18,
-                                Font.BOLD, BaseColor.BLACK);
-                        documento.add(new Paragraph((String) spPeriodo.getSelectedItem(), font));
-                        //anyadimos informes al archivo
-
-
-                        // Cerramos el documento.
-                        documento.close();
-                    }
-                    else {
-                        Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
-                    }
-
-                } catch (Exception e) {
-                    Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
-                }
+                ProgressDialogAsync pd = new ProgressDialogAsync(InformesActivity.this);
             }
         });
 
@@ -405,5 +386,85 @@ public class InformesActivity extends Activity {
         }
 
         return ruta;
+    }
+
+    private class ProgressDialogAsync extends AsyncTask<Void, Void, Void> {
+
+        private ProgressDialog dialog;
+
+        public ProgressDialogAsync(InformesActivity activity) {
+            dialog = new ProgressDialog(activity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage(getResources().getString(R.string.Creando));
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Creamos el documento.
+            Document documento = new Document();
+            boolean creado = false;
+            ProgressDialog dialog = null;
+            try {
+                dialog = ProgressDialog.show(getApplicationContext(),"",
+                        getResources().getString(R.string.Creando), true);
+
+                // Creamos el fichero con el nombre que deseemos.
+                String nombreFichero = "report_" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".pdf";
+                File f = crearFichero(nombreFichero);
+                if(f != null) {
+                    // Creamos el flujo de datos de salida para el fichero donde guardaremos el pdf.
+                    FileOutputStream ficheroPdf = new FileOutputStream(f.getAbsolutePath());
+                    // Asociamos el flujo que acabamos de crear al documento.
+                    PdfWriter.getInstance(documento, ficheroPdf);
+                    // Abrimos el documento.
+                    documento.open();
+
+                    // Insertamos una imagen que se encuentra en los recursos de la aplicación.
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    Image imagen = Image.getInstance(stream.toByteArray());
+                    documento.add(imagen);
+
+                    // titulo con una fuente personalizada.
+                    Font font = FontFactory.getFont(FontFactory.HELVETICA, 18,
+                            Font.BOLD, BaseColor.BLACK);
+                    documento.add(new Paragraph((String) spPeriodo.getSelectedItem(), font));
+
+                    documento.add(new Paragraph(""));
+                    ArrayList<InformeItem> informes = ((InformeAdapter)listViewMovsInforme.getAdapter()).getItemsActuales();
+                    int count = informes.size();
+                    for(int i = 0 ; i < count ; i++){
+                        documento.add(new Paragraph(informes.get(i).getPeriodoDesc() + " " + informes.get(i).getTipoInforme()));
+                    }
+                    // Cerramos el documento.
+                    documento.close();
+                    creado = true;
+                }
+                else {
+                    creado = false;
+                }
+            } catch (Exception ex) {
+                creado = false;
+            }
+            finally {
+                if(creado)
+                    Util.showToast(getApplicationContext(), getResources().getString(R.string.Creado));
+                else
+                    Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
+            }
+            return null;
+        }
     }
 }
