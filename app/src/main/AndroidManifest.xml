@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="globalsolutions.findemes" >
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/titulo"
+        android:theme="@style/AppTheme"
+        android:versionCode="1"
+        android:versionName="1.0.0">
+        <activity
+            android:name=".pantallas.activity.Password">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".pantallas.activity.MainActivity"
+            android:label="@string/titulo" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.GastoActivity"
+            android:label="@string/MENU_GASTOS" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.IngresoActivity"
+            android:label="@string/MENU_INGRESOS" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.MovimientosActivity"
+            android:label="@string/MENU_MOVIMIENTOS" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.InformesActivity"
+            android:label="@string/MENU_INFORMES" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.OpcionesActivity"
+            android:label="@string/MENU_OPCIONES" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.RegistrosActivity"
+            android:label="@string/MENU_REGISTROS" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.OptionActivityPassword"
+            android:label="@string/OPCIONES_CONTRASENYA" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.OptionActivityDatabase"
+            android:label="@string/OPCIONES_BASEDATOS" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.OptionActivityAyuda"
+            android:label="@string/OPCIONES_AYUDA" >
+        </activity>
+        <activity
+            android:name=".pantallas.activity.OptionActivityBarChart"
+            android:label="@string/MENU_INFORMES"
+            android:screenOrientation="landscape">
+        </activity>
+    </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+</manifest>

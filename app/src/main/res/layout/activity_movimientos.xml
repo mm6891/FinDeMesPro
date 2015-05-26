@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MovimientosActivity">
+    <LinearLayout
+        android:id="@+id/lyBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin"
+        android:orientation="horizontal">
+        <ImageButton android:id="@+id/btnBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"
+            android:background="@android:color/white"
+            android:layout_weight="1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:text="@string/MENU_MOVIMIENTOS"
+            android:layout_marginLeft="@dimen/margin"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lyLinearFiltroMov0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/lyBackButton">
+        <Spinner android:id="@+id/spMeses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Spinner android:id="@+id/spAnyos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lyLinearFiltroMov"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/lyLinearFiltroMov0">
+        <CheckBox
+            android:id="@+id/cbIconPlus"
+            android:button="@drawable/custom_plusfilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/margin"
+            android:onClick="filtraIngreso"/>
+        <CheckBox
+            android:id="@+id/cbIconMinus"
+            android:button="@drawable/custom_minusfilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="filtraGasto"/>
+        <Spinner android:id="@+id/spCategoriaMovimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.65" />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/listViewMov"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lyLinearFiltroMov"
+        android:layout_weight="1" />
+</RelativeLayout>

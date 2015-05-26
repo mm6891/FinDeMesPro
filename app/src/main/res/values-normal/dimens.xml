@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="text_size_dialog_title">22sp</dimen>
+    <dimen name="text_size_title">25sp</dimen>
+</resources>
