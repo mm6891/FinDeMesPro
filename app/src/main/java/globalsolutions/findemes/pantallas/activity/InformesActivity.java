@@ -243,6 +243,9 @@ public class InformesActivity extends Activity {
                         Font font = FontFactory.getFont(FontFactory.HELVETICA, 18,
                                 Font.BOLD, BaseColor.BLACK);
                         documento.add(new Paragraph((String) spPeriodo.getSelectedItem(), font));
+                        //anyadimos informes al archivo
+
+
                         // Cerramos el documento.
                         documento.close();
                     }
