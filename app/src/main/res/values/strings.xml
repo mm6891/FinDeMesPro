@@ -12,6 +12,7 @@
     <string name="Importar">Importar</string>
     <string name="Modificar">Modificar</string>
     <string name="Eliminar">Eliminar</string>
+    <string name="Exportar">Exportar</string>
     <string name="Cerrar">Cerrar</string>
     <string name="Cancelar">Cancelar</string>
     <string name="MENU_GASTOS">Gasto</string>
@@ -70,8 +71,11 @@
     <string name="AYUDA_BASEDATOS_IMPORTACION">Importar Base de datos, se sustituirá la actual por la seleccionada</string>
     <string name="Abandonar">¿Esta seguro de abandonar la aplicación?</string>
     <string name="Confirmar">¿Esta seguro de eliminar?</string>
+    <string name="ConfirmarExportar">El archivo se exportará en /Download/findemes/</string>
     <string name="Salir">¿Salir?</string>
     <string name="Asunto">Contraseña app FinDeMes</string>
+    <string name="AsuntoExportar">Exportación pdf app FinDeMes</string>
+    <string name="CuerpoExportar">Pdf adjuntado correctamente.</string>
     <string name="Cuerpo">Esta es tu contraseña para acceder a la app FinDeMes:</string>
     <string name="Enviar">Enviar</string>
     <string name="MovimientoFrecuente">Los movimientos frecuentes no se pueden editar desde Movimientos</string>

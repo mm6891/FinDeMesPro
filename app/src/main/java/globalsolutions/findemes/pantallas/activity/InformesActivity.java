@@ -32,6 +32,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -56,6 +57,7 @@ import globalsolutions.findemes.database.model.MovimientoItem;
 import globalsolutions.findemes.database.util.ArrayAdapterWithIcon;
 import globalsolutions.findemes.pantallas.adapter.InformeAdapter;
 import globalsolutions.findemes.pantallas.dialog.InformeDialog;
+import globalsolutions.findemes.pantallas.util.GMailSender;
 import globalsolutions.findemes.pantallas.util.Util;
 
 /**
@@ -236,8 +238,25 @@ public class InformesActivity extends Activity {
         btnExportarPDF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProgressDialogAsync pd = new ProgressDialogAsync(InformesActivity.this);
-                pd.execute();
+                new AlertDialog.Builder(InformesActivity.this)
+                        //set message, title, and icon
+                        .setTitle(getApplicationContext().getResources().getString(R.string.Exportar))
+                        .setMessage(getApplicationContext().getResources().getString(R.string.ConfirmarExportar))
+                        .setIcon(R.drawable.delete)
+                        .setPositiveButton(getApplicationContext().getResources().getString(R.string.Exportar), new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                ProgressDialogAsync pd = new ProgressDialogAsync(InformesActivity.this);
+                                pd.execute();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(getApplicationContext().getResources().getString(R.string.Cancelar), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create().show();
             }
         });
 
@@ -392,6 +411,8 @@ public class InformesActivity extends Activity {
     private class ProgressDialogAsync extends AsyncTask<Void, Void, Void> {
 
         private ProgressDialog dialog;
+        private String pdfName;
+        private boolean creado = false;
 
         public ProgressDialogAsync(InformesActivity activity) {
             dialog = new ProgressDialog(activity);
@@ -407,6 +428,23 @@ public class InformesActivity extends Activity {
         protected void onPostExecute(Void result) {
             if (dialog.isShowing()) {
                 dialog.dismiss();
+                if(creado) {
+                    Util.showToast(getApplicationContext(), getResources().getString(R.string.Creado));
+                    //si el pdf ha sido creado en ruta, se sugiere enviarlo al correo tambien
+                    try {
+                        GMailSender sender = new GMailSender("findemesapp@gmail.com", "esta50es");
+                        sender.sendMailWithAttachment(getResources().getString(R.string.AsuntoExportar),
+                                getResources().getString(R.string.CuerpoExportar),
+                                "findemesapp@gmail.com",
+                                "manuel.molero@gmail.com", getApplicationContext(), pdfName);
+                        Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_ok));
+                    } catch (Exception e) {
+                        Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_envio));
+                        return;
+                    }
+                }
+                else
+                    Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
             }
         }
 
@@ -414,15 +452,10 @@ public class InformesActivity extends Activity {
         protected Void doInBackground(Void... params) {
             // Creamos el documento.
             Document documento = new Document();
-            boolean creado = false;
-            ProgressDialog dialog = null;
             try {
-                dialog = ProgressDialog.show(getApplicationContext(),"",
-                        getResources().getString(R.string.Creando), true);
-
                 // Creamos el fichero con el nombre que deseemos.
-                String nombreFichero = "report_" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".pdf";
-                File f = crearFichero(nombreFichero);
+                pdfName = "report_" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".pdf";
+                File f = crearFichero(pdfName);
                 if(f != null) {
                     // Creamos el flujo de datos de salida para el fichero donde guardaremos el pdf.
                     FileOutputStream ficheroPdf = new FileOutputStream(f.getAbsolutePath());
@@ -436,18 +469,27 @@ public class InformesActivity extends Activity {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     Image imagen = Image.getInstance(stream.toByteArray());
+                    imagen.setAlignment(6);
                     documento.add(imagen);
 
                     // titulo con una fuente personalizada.
                     Font font = FontFactory.getFont(FontFactory.HELVETICA, 18,
                             Font.BOLD, BaseColor.BLACK);
-                    documento.add(new Paragraph((String) spPeriodo.getSelectedItem(), font));
+                    documento.add(new Phrase((String) spPeriodo.getSelectedItem(), font));
 
-                    documento.add(new Paragraph(""));
+                    documento.add(new Paragraph("\n"));
                     ArrayList<InformeItem> informes = ((InformeAdapter)listViewMovsInforme.getAdapter()).getItemsActuales();
                     int count = informes.size();
+                    // titulo con una fuente personalizada.
+                    Font fontInforme = FontFactory.getFont(FontFactory.HELVETICA, 12,
+                            Font.BOLD, BaseColor.BLACK);
                     for(int i = 0 ; i < count ; i++){
-                        documento.add(new Paragraph(informes.get(i).getPeriodoDesc() + " " + informes.get(i).getTipoInforme()));
+                        documento.add(new Paragraph(informes.get(i).getPeriodoDesc(),fontInforme));
+                        documento.add(new Paragraph(getResources().getString(R.string.Ingresos) + " " + informes.get(i).getIngresoValor()));
+                        documento.add(new Paragraph(getResources().getString(R.string.Gastos) + " " + informes.get(i).getGastoValor()));
+                        documento.add(new Paragraph(getResources().getString(R.string.Saldo) + " " + informes.get(i).getTotalValor()));
+
+                        documento.add(new Paragraph("\n"));
                     }
                     // Cerramos el documento.
                     documento.close();
@@ -458,12 +500,6 @@ public class InformesActivity extends Activity {
                 }
             } catch (Exception ex) {
                 creado = false;
-            }
-            finally {
-                if(creado)
-                    Util.showToast(getApplicationContext(), getResources().getString(R.string.Creado));
-                else
-                    Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
             }
             return null;
         }

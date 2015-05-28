@@ -4,19 +4,28 @@ package globalsolutions.findemes.pantallas.util;
  * Created by manuel.molero on 21/04/2015.
  */
 import android.content.Context;
+import android.os.Environment;
 import android.os.Handler;
+
+import com.itextpdf.text.Document;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -69,6 +78,58 @@ public class GMailSender extends javax.mail.Authenticator {
                 message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
             else
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
+
+            final Handler mHandler = new Handler();
+            final Runnable mUpdateResults = new Runnable() {
+                public void run() {
+                    Util.showToast(cntx, cntx.getResources().getString(R.string.Validacion_Correo_envio));
+                }
+            };
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(message);
+                    } catch (MessagingException e) {
+                        mHandler.post(mUpdateResults);
+                    }
+                }
+            }).start();
+        }catch(Exception e){
+            Util.showToast(context , context.getResources().getString(R.string.Validacion_Correo_envio));
+        }
+    }
+
+    public synchronized void sendMailWithAttachment(String subject, String body, String sender, String recipients, Context context,String pdfName) throws Exception {
+        final MimeMessage message = new MimeMessage(session);
+        final Context cntx = context;
+        try{
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+            message.setSender(new InternetAddress(sender));
+            message.setSubject(subject);
+            message.setDataHandler(handler);
+            if (recipients.indexOf(',') > 0)
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
+            else
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
+
+            //anayadimos pdf adjunto
+            Multipart multipart = new MimeMultipart();
+            BodyPart messageBodyPart = new MimeBodyPart();
+            multipart.addBodyPart(messageBodyPart);
+            messageBodyPart = new MimeBodyPart();
+            File ruta = new File(
+                    Environment
+                            .getExternalStoragePublicDirectory(
+                                    Environment.DIRECTORY_DOWNLOADS),
+                    "/findemes");
+            File fichero = new File(ruta, pdfName);
+            DataSource source = new FileDataSource(fichero.getAbsolutePath());
+            messageBodyPart.setDataHandler(new DataHandler(source));
+            messageBodyPart.setFileName(pdfName);
+            multipart.addBodyPart(messageBodyPart);
+            message.setContent(multipart);
 
             final Handler mHandler = new Handler();
             final Runnable mUpdateResults = new Runnable() {
