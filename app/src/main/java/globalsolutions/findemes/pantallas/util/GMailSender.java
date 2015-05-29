@@ -105,18 +105,17 @@ public class GMailSender extends javax.mail.Authenticator {
         final MimeMessage message = new MimeMessage(session);
         final Context cntx = context;
         try{
-            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
             message.setSender(new InternetAddress(sender));
             message.setSubject(subject);
-            message.setDataHandler(handler);
             if (recipients.indexOf(',') > 0)
                 message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
             else
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
 
             //anayadimos pdf adjunto
-            Multipart multipart = new MimeMultipart();
             BodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setText(body);
+            Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
             messageBodyPart = new MimeBodyPart();
             File ruta = new File(

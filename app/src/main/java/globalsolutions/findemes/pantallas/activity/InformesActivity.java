@@ -57,6 +57,7 @@ import globalsolutions.findemes.database.model.MovimientoItem;
 import globalsolutions.findemes.database.util.ArrayAdapterWithIcon;
 import globalsolutions.findemes.pantallas.adapter.InformeAdapter;
 import globalsolutions.findemes.pantallas.dialog.InformeDialog;
+import globalsolutions.findemes.pantallas.dialog.MailDialog;
 import globalsolutions.findemes.pantallas.util.GMailSender;
 import globalsolutions.findemes.pantallas.util.Util;
 
@@ -431,17 +432,11 @@ public class InformesActivity extends Activity {
                 if(creado) {
                     Util.showToast(getApplicationContext(), getResources().getString(R.string.Creado));
                     //si el pdf ha sido creado en ruta, se sugiere enviarlo al correo tambien
-                    try {
-                        GMailSender sender = new GMailSender("findemesapp@gmail.com", "esta50es");
-                        sender.sendMailWithAttachment(getResources().getString(R.string.AsuntoExportar),
-                                getResources().getString(R.string.CuerpoExportar),
-                                "findemesapp@gmail.com",
-                                "manuel.molero@gmail.com", getApplicationContext(), pdfName);
-                        Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_ok));
-                    } catch (Exception e) {
-                        Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_envio));
-                        return;
-                    }
+                    DialogFragment newFragment = new MailDialog();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("pdfname", pdfName);
+                    newFragment.setArguments(bundle);
+                    newFragment.show(getFragmentManager(), "MAILTO");
                 }
                 else
                     Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));

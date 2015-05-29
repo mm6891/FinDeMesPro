@@ -65,6 +65,7 @@
     <string name="AFIRMACION">SI</string>
     <string name="NEGACION">NO</string>
     <string name="AYUDA_CONTRASENYA">Opcionalmente puedes enviarte la contraseña al correo electrónico</string>
+    <string name="EXPORTAR_MAIL">Indica correo electrónico al que enviar el archivo exportado</string>
     <string name="MAILTO">Correo para</string>
     <string name="CONTRASENYA_AYUDA">Introduce tu contraseña de 4 dígitos</string>
     <string name="AYUDA_BASEDATOS">Realiza un backup de tu base de datos, se guardará en "Storage Card/findemes/DBFinDeMes.db"</string>
