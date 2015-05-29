@@ -17,6 +17,7 @@ import java.nio.channels.FileChannel;
 
 import globalsolutions.findemes.R;
 import globalsolutions.findemes.database.util.MyDatabaseHelper;
+import globalsolutions.findemes.pantallas.util.DropBoxUtil;
 import globalsolutions.findemes.pantallas.util.FileDialog;
 import globalsolutions.findemes.pantallas.util.Util;
 
@@ -31,6 +32,7 @@ public class OptionActivityDatabase extends Activity {
 
     private ImageButton guardar;
     private ImageButton importar;
+    private ImageButton btnImportarDropBoxDB;
     private FileDialog fileDialog;
 
     @Override
@@ -100,6 +102,32 @@ public class OptionActivityDatabase extends Activity {
                         } catch (IOException e) {
                             Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
                         }
+                    }
+                });
+                fileDialog.showDialog();
+            }
+        });
+        //importar db a dropbox, realizar backup
+        btnImportarDropBoxDB = (ImageButton) findViewById(R.id.btnImportarDropBoxDB);
+        btnImportarDropBoxDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File mPath = new File(Environment.getExternalStorageDirectory() + "//DIR//");
+                fileDialog = new FileDialog(OptionActivityDatabase.this, mPath);
+                fileDialog.setFileEndsWith(MyDatabaseHelper.DATABASE_NAME);
+                fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+                    public void fileSelected(File file) {
+                        //MyDatabaseHelper dbHelper = new MyDatabaseHelper(getApplicationContext());
+                        /*try {*/
+                            //boolean realizado = dbHelper.importDatabase(file.getPath());
+                            boolean realizado = DropBoxUtil.backup(getApplicationContext(),file.getPath());
+                            if(realizado)
+                                Util.showToast(getApplicationContext(), getResources().getString(R.string.Creado));
+                            else
+                                Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
+                       /* } catch (IOException e) {
+                            Util.showToast(getApplicationContext(), getResources().getString(R.string.No_Creado));
+                        }*/
                     }
                 });
                 fileDialog.showDialog();

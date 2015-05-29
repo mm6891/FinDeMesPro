@@ -70,6 +70,7 @@
     <string name="CONTRASENYA_AYUDA">Introduce tu contraseña de 4 dígitos</string>
     <string name="AYUDA_BASEDATOS">Realiza un backup de tu base de datos, se guardará en "Storage Card/findemes/DBFinDeMes.db"</string>
     <string name="AYUDA_BASEDATOS_IMPORTACION">Importar Base de datos, se sustituirá la actual por la seleccionada</string>
+    <string name="AYUDA_BASEDATOS_IMPORTACION_DROPBOX">Importar Base de datos a DropBox.</string>
     <string name="Abandonar">¿Esta seguro de abandonar la aplicación?</string>
     <string name="Confirmar">¿Esta seguro de eliminar?</string>
     <string name="ConfirmarExportar">El archivo se exportará en /Download/findemes/</string>

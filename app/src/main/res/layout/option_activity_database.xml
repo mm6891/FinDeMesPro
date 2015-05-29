@@ -101,5 +101,34 @@
             android:src="@drawable/adddatabase"
             />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lyLinear5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_below="@+id/lyLinear4">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/AYUDA_BASEDATOS_IMPORTACION_DROPBOX"
+            android:textSize="@dimen/text_size" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lyLinear6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin"
+        android:gravity="center"
+        android:layout_below="@+id/lyLinear5">
+        <ImageButton
+            android:id="@+id/btnImportarDropBoxDB"
+            android:background="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/adddatabase"
+            />
+    </LinearLayout>
 </RelativeLayout>
     </ScrollView>

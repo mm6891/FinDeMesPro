@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="globalsolutions.findemes" >
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -63,22 +62,18 @@
             android:label="@string/MENU_INFORMES"
             android:screenOrientation="landscape">
         </activity>
-        <activity android:name="com.dropbox.sync.android.DbxAuthActivity" />
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:configChanges="orientation|keyboard">
             <intent-filter>
-                <data android:scheme="db-APP_KEY" />
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-tqf9laifyog9tt4" />
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <service
-            android:name="com.dropbox.sync.android.DbxSyncService"
-            android:enabled="true"
-            android:exported="false"
-            android:label="Dropbox Sync" />
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>
