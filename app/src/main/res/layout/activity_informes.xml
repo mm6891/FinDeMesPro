@@ -61,27 +61,31 @@
         android:layout_below="@+id/lyLinearFiltroMov"
         android:layout_weight="1"
         android:layout_above="@+id/glResumenInformes" />
-    <ImageButton
+    <Button
         android:id="@+id/btnGraficar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:layout_marginLeft="@dimen/margin"
-        android:layout_marginTop="@dimen/margin"
-        android:src="@drawable/ic_report"
+        android:text="@string/Graficar"
+        android:drawableTop="@drawable/combochart"
         android:textStyle="bold"
         android:textSize="@dimen/text_size"
-        android:layout_below="@+id/listViewMovInforme"
-        />
-    <ImageButton
+        android:layout_alignTop="@+id/btnExportarPDF"
+        android:layout_alignParentBottom="true" />
+    <Button
         android:id="@+id/btnExportarPDF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_math"
+        android:background="@android:color/white"
+        android:drawableTop="@drawable/pdfbutton"
         android:textStyle="bold"
         android:textSize="@dimen/text_size"
-        android:layout_alignTop="@+id/btnGraficar"
+        android:text="@string/Exportar"
         android:layout_toRightOf="@+id/btnGraficar"
-        android:layout_toEndOf="@+id/btnGraficar" />
+        android:layout_toEndOf="@+id/btnGraficar"
+        android:layout_below="@+id/listViewMovInforme"
+        android:layout_alignBottom="@+id/glResumenInformes" />
     <GridLayout
         android:id="@+id/glResumenInformes"
         android:layout_width="wrap_content"

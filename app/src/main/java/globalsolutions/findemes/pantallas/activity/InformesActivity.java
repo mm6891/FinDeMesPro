@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -71,8 +72,8 @@ public class InformesActivity extends Activity {
     private Spinner spPeriodoFiltro;
 
     private ListView listViewMovsInforme;
-    private ImageButton btnGraficar;
-    private ImageButton btnExportarPDF;
+    private Button btnGraficar;
+    private Button btnExportarPDF;
 
     //this counts how many Spinner's are on the UI
     private int mSpinnerCount=0;
@@ -195,7 +196,7 @@ public class InformesActivity extends Activity {
                     showInformeDialog(bundle);
                 }
             });
-        btnGraficar = (ImageButton) findViewById(R.id.btnGraficar);
+        btnGraficar = (Button) findViewById(R.id.btnGraficar);
         //btnGraficar.setEnabled(false);
 
         btnGraficar.setOnClickListener(new View.OnClickListener() {
@@ -235,7 +236,7 @@ public class InformesActivity extends Activity {
         });
 
         //exportar informes a pdf
-        btnExportarPDF = (ImageButton) findViewById(R.id.btnExportarPDF);
+        btnExportarPDF = (Button) findViewById(R.id.btnExportarPDF);
         btnExportarPDF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

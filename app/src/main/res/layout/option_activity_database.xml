@@ -127,7 +127,7 @@
             android:background="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/adddatabase"
+            android:src="@drawable/dropbox"
             />
     </LinearLayout>
 </RelativeLayout>
