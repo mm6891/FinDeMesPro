@@ -244,7 +244,7 @@ public class InformesActivity extends Activity {
                         //set message, title, and icon
                         .setTitle(getApplicationContext().getResources().getString(R.string.Exportar))
                         .setMessage(getApplicationContext().getResources().getString(R.string.ConfirmarExportar))
-                        .setIcon(R.drawable.delete)
+                        .setIcon(R.drawable.pdflittle)
                         .setPositiveButton(getApplicationContext().getResources().getString(R.string.Exportar), new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
