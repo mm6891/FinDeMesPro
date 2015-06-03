@@ -125,13 +125,10 @@ public class OptionActivityDatabase extends Activity {
                 fileDialog.setFileEndsWith(MyDatabaseHelper.DATABASE_NAME);
                 fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
                     public void fileSelected(File file) {
-                        // We create a new AuthSession so that we can use the Dropbox API.
-                        AndroidAuthSession session = buildSession();
-                        mApi = new DropboxAPI<AndroidAuthSession>(session);
                         // Start the remote authentication
                         mApi.getSession().startOAuth2Authentication(OptionActivityDatabase.this);
 
-                        UploadDatabase upload = new UploadDatabase(getApplicationContext(), mApi, DATABASES_DIR, file);
+                        UploadDatabase upload = new UploadDatabase(OptionActivityDatabase.this,getApplicationContext(), mApi, DATABASES_DIR, file);
                         upload.execute();
 
                     }
@@ -139,6 +136,10 @@ public class OptionActivityDatabase extends Activity {
                 fileDialog.showDialog();
             }
         });
+
+        // We create a new AuthSession so that we can use the Dropbox API.
+        AndroidAuthSession session = buildSession();
+        mApi = new DropboxAPI<AndroidAuthSession>(session);
     }
 
     @Override
@@ -178,7 +179,24 @@ public class OptionActivityDatabase extends Activity {
         AppKeyPair appKeyPair = new AppKeyPair(appKey, appSecret);
 
         AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
-        loadAuth(session);
+        //loadAuth(session);
+        session.setOAuth2AccessToken(appSecret);
         return session;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mApi.getSession().authenticationSuccessful()) {
+            try {
+                // Required to complete auth, sets the access token on the session
+                mApi.getSession().finishAuthentication();
+
+                String accessToken = mApi.getSession().getOAuth2AccessToken();
+            } catch (IllegalStateException e) {
+                Util.showToast(getApplicationContext(), e.getMessage());
+            }
+        }
     }
 }

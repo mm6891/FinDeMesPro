@@ -20,6 +20,9 @@ import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
 
+import globalsolutions.findemes.R;
+import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
+
 /**
  * Created by manuel.molero on 29/05/2015.
  */
@@ -32,34 +35,21 @@ import com.dropbox.client2.exception.DropboxUnlinkedException;
         private long mFileLen;
         private UploadRequest mRequest;
         private Context mContext;
-        private final ProgressDialog mDialog;
+        private ProgressDialog mDialog;
 
         private String mErrorMsg;
 
 
-        public UploadDatabase(Context context, DropboxAPI<?> api, String dropboxPath,
+        public UploadDatabase(OptionActivityDatabase activity,Context context, DropboxAPI<?> api, String dropboxPath,
                              File file) {
             // We set the context this way so we don't accidentally leak activities
             mContext = context.getApplicationContext();
 
+            mDialog = new ProgressDialog(activity);
             mFileLen = file.length();
             mApi = api;
             mPath = dropboxPath;
             mFile = file;
-
-            mDialog = new ProgressDialog(context);
-            mDialog.setMax(100);
-            mDialog.setMessage("Uploading " + file.getName());
-            mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            mDialog.setProgress(0);
-            mDialog.setButton(ProgressDialog.BUTTON_POSITIVE, "Cancel", new OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // This will cancel the putFile operation
-                    mRequest.abort();
-                }
-            });
-            mDialog.show();
         }
 
         @Override
@@ -139,12 +129,30 @@ import com.dropbox.client2.exception.DropboxUnlinkedException;
         }
 
         @Override
+        protected void onPreExecute() {
+            mDialog.setMax(100);
+            mDialog.setMessage("Uploading " + mFile.getName());
+            mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            mDialog.setProgress(0);
+            mDialog.setButton(ProgressDialog.BUTTON_POSITIVE, "Cancel", new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // This will cancel the putFile operation
+                    mRequest.abort();
+                }
+            });
+            mDialog.show();
+        }
+
+        @Override
         protected void onPostExecute(Boolean result) {
-            mDialog.dismiss();
-            if (result) {
-                showToast("File successfully uploaded");
-            } else {
-                showToast(mErrorMsg);
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+                if (result) {
+                    showToast("File successfully uploaded");
+                } else {
+                    showToast(mErrorMsg);
+                }
             }
         }
 
