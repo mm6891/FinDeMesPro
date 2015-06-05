@@ -5,6 +5,9 @@ import com.dropbox.client2.DropboxAPI;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -55,9 +58,20 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
+                //final File tempDropboxDirectory = mContext.getCacheDir();
+                // Creating a temporal file.
+                /*File tempFileToUploadToDropbox = File.createTempFile("file", ".txt", tempDropboxDirectory);
+                FileWriter fileWriter = new FileWriter(tempFileToUploadToDropbox);
+                fileWriter.write("Hello World drom Android Dropbox Implementation Example!");
+                fileWriter.close();*/
+                // Uploading the newly created file to Dropbox.
+                FileInputStream fileInputStream = new FileInputStream(mFile);
+                mApi.putFile(mPath + mFile.getPath(), fileInputStream, mFile.length(), null, null);
+                //tempFileToUploadToDropbox.delete();
+
                 // By creating a request, we get a handle to the putFile operation,
                 // so we can cancel it later if we want to
-                FileInputStream fis = new FileInputStream(mFile);
+               /* FileInputStream fis = new FileInputStream(mFile);
                 String path = mPath + mFile.getName();
                 mRequest = mApi.putFileOverwriteRequest(path, fis, mFile.length(),
                         new ProgressListener() {
@@ -76,7 +90,7 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
                 if (mRequest != null) {
                     mRequest.upload();
                     return true;
-                }
+                }*/
 
             } catch (DropboxUnlinkedException e) {
                 // This session wasn't authenticated properly or user unlinked
@@ -118,6 +132,8 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
                 // Unknown error
                 mErrorMsg = "Unknown error.  Try again.";
             } catch (FileNotFoundException e) {
+            } catch (IOException e) {
+                mErrorMsg = "Error I/O";
             }
             return false;
         }

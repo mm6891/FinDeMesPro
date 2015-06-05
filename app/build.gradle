@@ -35,10 +35,12 @@ dependencies {
     compile files('C:/Users/manuel.molero/AndroidstudioProjects/FinDeMesPro/libs/achartengine-1.1.0.jar')
     compile files('C:/Users/manuel.molero/AndroidStudioProjects/FinDeMesPro/libs/itextg-5.5.3.jar')
     compile files('C:/Users/manuel.molero/AndroidstudioProjects/FinDeMesPro/libs/dropbox-android-sdk-1.6.3.jar')
+    compile files('C:/Users/manuel.molero/AndroidstudioProjects/FinDeMesPro/libs/json_simple-1.1.jar')
     compile files('C:/Users/Manuel/AndroidstudioProjects/FinDeMesPro/libs/additionnal.jar')
     compile files('C:/Users/Manuel/AndroidstudioProjects/FinDeMesPro/libs/activation.jar')
     compile files('C:/Users/Manuel/AndroidstudioProjects/FinDeMesPro/libs/mail.jar')
     compile files('C:/Users/Manuel/AndroidstudioProjects/FinDeMesPro/libs/achartengine-1.1.0.jar')
     compile files('C:/Users/Manuel/AndroidstudioProjects/FinDeMesPro/libs/itextg-5.5.3.jar')
     compile files('C:/Users/Manuel/AndroidstudioProjects/FinDeMesPro/libs/dropbox-android-sdk-1.6.3.jar')
+    compile files('C:/Users/Manuel/AndroidstudioProjects/FinDeMesPro/libs/json_simple-1.1.jar')
 }
