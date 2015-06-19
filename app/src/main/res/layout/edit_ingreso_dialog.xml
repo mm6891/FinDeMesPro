@@ -57,7 +57,7 @@
             android:id="@+id/tvDescripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Decripcion"
+            android:text="@string/Descripcion"
             android:textStyle="bold"
             android:textSize="@dimen/text_size"
             android:layout_weight="1"/>

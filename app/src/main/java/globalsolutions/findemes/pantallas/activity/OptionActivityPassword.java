@@ -93,8 +93,21 @@ public class OptionActivityPassword extends Activity {
             @Override
             public void onClick(View v) {
                 if(validaCamposPasswordLocal() && validaCamposEnvioCorreo()) {
-                    //Envio de correo
                     try {
+                    //Envio de correo
+                        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        emailIntent.setType("message/rfc822");
+                        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{txtMailTo.getText().toString()});
+                        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.Asunto));
+                        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getResources().getString(R.string.Cuerpo)
+                                + " " + txtPassword.getText().toString());
+                        startActivity(Intent.createChooser(emailIntent, "Sending email..."));
+                        //Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_ok));
+                    } catch (Exception e) {
+                        Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_envio));
+                        return;
+                    }
+                    /*try {
                         GMailSender sender = new GMailSender("findemesapp@gmail.com", "esta50es");
                         sender.sendMail(getResources().getString(R.string.Asunto),
                                 getResources().getString(R.string.Cuerpo) + " " + txtPassword.getText().toString(),
@@ -104,7 +117,7 @@ public class OptionActivityPassword extends Activity {
                     } catch (Exception e) {
                         Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_envio));
                         return;
-                    }
+                    }*/
                 }
             }
         });

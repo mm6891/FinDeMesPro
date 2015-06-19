@@ -9,10 +9,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -63,6 +66,20 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         }
     }
 
+    public void actualizarFiltroEditText(String result,String editText) {
+        if(result.equals(String.valueOf(Activity.RESULT_OK))){
+            ((MovimientoAdapter)listViewMovs.getAdapter()).setMesSeleccionado(spFiltroMes.getSelectedItemPosition());
+            ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(devuelveAnyo());
+
+            if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
+                ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO) + ";" + editText);
+            else if(((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && !((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
+                ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO)+ ";" + editText);
+            else
+                ((MovimientoAdapter)listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO)+ ";" + editText);
+        }
+    }
+
     public void actualizarFiltroCategoria() {
         if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
             ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
@@ -74,6 +91,8 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
     private Spinner spFiltroMes;
     private Spinner spFitroAnyo;
     private Spinner spFiltroCategoria;
+    private EditText etSearchbox;
+
 
     //this counts how many Spinner's are on the UI
     private int mSpinnerCount=0;
@@ -160,6 +179,23 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         //filtro categoria del movimiento
         spFiltroCategoria = (Spinner) findViewById(R.id.spCategoriaMovimiento);
         spFiltroCategoria.setEnabled(false);
+
+        //filtro por edittext
+        etSearchbox=(EditText)findViewById(R.id.etSearchbox);
+        listViewMovs.setTextFilterEnabled(true);
+        etSearchbox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+                actualizarFiltroEditText(String.valueOf(Activity.RESULT_OK), arg0.toString());
+            }
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+            }
+            @Override
+            public void afterTextChanged(Editable arg0) {
+            }
+        });
 
         listViewMovs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
