@@ -88,8 +88,9 @@
     <string name="Numero_Semana">Semana nº</string>
     <string name="Version">1.0.0</string>
     <string name="AcercaDeDescripcion1">Esta es una aplicación desarrollada por Manuel Molero Busto</string>
-    <string name="AcercaDeDescripcion2">Las traducciones disponibles son español (castellano) e inglés</string>
+    <string name="AcercaDeDescripcion2">Las traducciones disponibles son español (castellano),inglés y portugués</string>
     <string name="AcercaDeDescripcion3">Si quieres ayudar con la traducción de la aplicación a otro idioma o mejorar la existente envía un correo a la siguiente dirección:</string>
+    <string name="AcercaDeDescripcion4">Este aplicativo ha sido traducido por Jervânio Lima al Portugués</string>
     <string name="AyudaDescripcion1">Aplicación desarrollada para permitir organizar tus gastos e ingresos. Introduce tus movimientos de ingreso o gasto por fecha y obtén tus resultados en lista de movimientos e informes.</string>
     <string name="AyudaDescripcion2">Organizar tus movimientos hoy en día te permite mejorar el control sobre tu dinero.</string>
     <string name="AyudaIngresos">Registra tus movimientos de ingresos y clasificalos. Puedes añadir categorías adicionales.</string>
@@ -136,4 +137,5 @@
     <string name="Grupo_prestamo">Préstamo</string>
     <string name="Grupo_ventas">Ventas</string>
     <string name="Grupo_extra">Extra</string>
+		
     </resources>

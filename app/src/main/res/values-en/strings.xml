@@ -113,7 +113,7 @@
     <string name="Formato_Moneda">Select the currency format preferred</string>
     <string name="Version">1.0.0</string>
     <string name="AcercaDeDescripcion1">This is an application developed by Manuel Molero Busto</string>
-    <string name="AcercaDeDescripcion2">The available translations are Spanish (Castilian) and English</string>
+    <string name="AcercaDeDescripcion2">The available translations are Spanish (Castilian), English and Brazilian Portuguese</string>
     <string name="AcercaDeDescripcion3">If you would like to help with the translation of the application to another language or improve the existing sends an email to the following address:</string>
     <string name="AyudaDescripcion1">Application developed to allow organize your expenses and income. Enter your movements of income or expense by date and get your results in movement list and reports.</string>
     <string name="AyudaDescripcion2">Organize your movements today lets you improve the control over your money.</string>
@@ -128,5 +128,6 @@
     <string name="ConjuncionSemana">to</string>
     <string name="Cancelar">Cancel</string>
     <string name="Confirmar">Are you sure?</string>
-    <string name="Creando">Loading...</string>
+    <string name="AcercaDeDescripcion4">This application has been translated by Jervânio Lima to to the Portuguese of Brazil</string>
+    
 </resources>

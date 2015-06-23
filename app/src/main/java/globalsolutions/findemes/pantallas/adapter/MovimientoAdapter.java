@@ -136,6 +136,7 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                 FilterResults results = new FilterResults();
 
                 String filterableString;
+                String filterableEditText = "";
                 int mesSeleccionado1 = getMesSeleccionado();
                 int anyoSeleccionado = getAnyoSeleccionado();
 
@@ -144,13 +145,33 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                 int count = items.size();
                 final ArrayList<MovimientoItem> nlist = new ArrayList<MovimientoItem>(count);
 
+                //comprobamos filtro edittext
+                if(constraint.toString().contains(";") && constraint.toString().split(";").length > 1) {
+                    filterableEditText = constraint.toString().split(";")[1].toLowerCase().trim();
+                    constraint = constraint.toString().split(";")[0];
+                }
+                else if(constraint.toString().contains(";"))
+                    constraint = constraint.toString().split(";")[0];
+
                 //gastos + ingresos
                 if(constraint.toString().equals(context.getResources().getString(R.string.TIPO_FILTRO_RESETEO))){
                     //filtro mes all y filtro anyo all
                     if(getMesSeleccionado() == Constantes.NUMERO_MES_TODO && getAnyoSeleccionado() == Constantes.NUMERO_ANYO_TODO){
-                        results.values = items;
-                        results.count = items.size();
-                        return results;
+                        if(filterableEditText.isEmpty()) {
+                            results.values = items;
+                            results.count = items.size();
+                            return results;
+                        }
+                        else{
+                            for (int i = 0; i < count; i++) {
+                                if (list.get(i).getDescripcion().contains(filterableEditText.toLowerCase().trim())) {
+                                    nlist.add(list.get(i));
+                                }
+                            }
+                            results.values = nlist;
+                            results.count = nlist.size();
+                            return results;
+                        }
                     }
                     //filtro mes all y filtro anyo
                     else if(getMesSeleccionado() == Constantes.NUMERO_MES_TODO){
@@ -163,8 +184,15 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                                 e.printStackTrace();
                             }
                             int anyoMov = cal.get(Calendar.YEAR);
-                            if (anyoMov == anyoSeleccionado){
-                                nlist.add(list.get(i));
+                            if(!filterableEditText.isEmpty()) {
+                                if (anyoMov == anyoSeleccionado && list.get(i).getDescripcion().contains(filterableEditText.toLowerCase().trim())) {
+                                    nlist.add(list.get(i));
+                                }
+                            }
+                            else{
+                                if (anyoMov == anyoSeleccionado) {
+                                    nlist.add(list.get(i));
+                                }
                             }
                         }
                         results.values = nlist;
@@ -182,8 +210,15 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                                 e.printStackTrace();
                             }
                             int mesMov = cal.get(Calendar.MONTH);
-                            if (mesMov == mesSeleccionado1){
-                                nlist.add(list.get(i));
+                            if(!filterableEditText.isEmpty()) {
+                                if (mesMov == mesSeleccionado1 && list.get(i).getDescripcion().contains(filterableEditText.toLowerCase().trim())) {
+                                    nlist.add(list.get(i));
+                                }
+                            }
+                            else{
+                                if (mesMov == mesSeleccionado1) {
+                                    nlist.add(list.get(i));
+                                }
                             }
                         }
                         results.values = nlist;
@@ -201,8 +236,16 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                         }
                         int mesMov = cal.get(Calendar.MONTH);
                         int anyoMov = cal.get(Calendar.YEAR);
-                        if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado){
-                            nlist.add(list.get(i));
+                        if(!filterableEditText.isEmpty()) {
+                            if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado &&
+                                    list.get(i).getDescripcion().contains(filterableEditText.toLowerCase().trim())) {
+                                nlist.add(list.get(i));
+                            }
+                        }
+                        else{
+                            if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado) {
+                                nlist.add(list.get(i));
+                            }
                         }
                     }
 
@@ -217,14 +260,28 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                     if(getMesSeleccionado() == Constantes.NUMERO_MES_TODO && getAnyoSeleccionado() == Constantes.NUMERO_ANYO_TODO){
                         for (int i = 0; i < count; i++) {
                             filterableString = list.get(i).getTipoMovimiento();
-                            if(getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
-                                if (filterableString.toLowerCase().trim().equals(filterString.trim())
-                                        && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase()))
-                                    nlist.add(list.get(i));
-                            }
-                            else {
-                                if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
+                            if(!filterableEditText.isEmpty()) {
+                                if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())
+                                            && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim()))
                                         nlist.add(list.get(i));
+                                } else {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim())) {
+                                        nlist.add(list.get(i));
+                                    }
+                                }
+                            }
+                            else{
+                                if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase()))
+                                        nlist.add(list.get(i));
+                                } else {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
+                                        nlist.add(list.get(i));
+                                    }
                                 }
                             }
                         }
@@ -244,17 +301,34 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                             }
                             int anyoMov = cal.get(Calendar.YEAR);
                             filterableString = list.get(i).getTipoMovimiento();
-                            if(getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
-                                if (filterableString.toLowerCase().trim().equals(filterString.trim())
-                                        && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())) {
-                                    if (anyoMov == anyoSeleccionado)
-                                        nlist.add(list.get(i));
+                            if(filterableEditText.isEmpty()) {
+                                if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())) {
+                                        if (anyoMov == anyoSeleccionado)
+                                            nlist.add(list.get(i));
+                                    }
+                                } else {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
+                                        if (anyoMov == anyoSeleccionado)
+                                            nlist.add(list.get(i));
+                                    }
                                 }
                             }
                             else {
-                                if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
-                                    if (anyoMov == anyoSeleccionado)
-                                        nlist.add(list.get(i));
+                                if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())
+                                            && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim())) {
+                                        if (anyoMov == anyoSeleccionado)
+                                            nlist.add(list.get(i));
+                                    }
+                                } else {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim())) {
+                                        if (anyoMov == anyoSeleccionado)
+                                            nlist.add(list.get(i));
+                                    }
                                 }
                             }
                         }
@@ -274,17 +348,34 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                             }
                             int mesMov = cal.get(Calendar.MONTH);
                             filterableString = list.get(i).getTipoMovimiento();
-                            if(getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
-                                if (filterableString.toLowerCase().trim().equals(filterString.trim())
-                                        && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())) {
-                                    if (mesMov == mesSeleccionado1)
-                                        nlist.add(list.get(i));
+                            if(filterableEditText.isEmpty()) {
+                                if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())) {
+                                        if (mesMov == mesSeleccionado1)
+                                            nlist.add(list.get(i));
+                                    }
+                                } else {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
+                                        if (mesMov == mesSeleccionado1)
+                                            nlist.add(list.get(i));
+                                    }
                                 }
                             }
-                            else {
-                                if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
-                                    if (mesMov == mesSeleccionado1)
-                                        nlist.add(list.get(i));
+                            else{
+                                if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())
+                                            && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim())) {
+                                        if (mesMov == mesSeleccionado1)
+                                            nlist.add(list.get(i));
+                                    }
+                                } else {
+                                    if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                            && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim())) {
+                                        if (mesMov == mesSeleccionado1)
+                                            nlist.add(list.get(i));
+                                    }
                                 }
                             }
                         }
@@ -304,17 +395,34 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                         int mesMov = cal.get(Calendar.MONTH);
                         int anyoMov = cal.get(Calendar.YEAR);
                         filterableString = list.get(i).getTipoMovimiento();
-                        if(getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
-                            if (filterableString.toLowerCase().trim().equals(filterString.trim())
-                                    && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())) {
-                                if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado)
-                                    nlist.add(list.get(i));
+                        if(filterableEditText.isEmpty()) {
+                            if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                        && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())) {
+                                    if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado)
+                                        nlist.add(list.get(i));
+                                }
+                            } else {
+                                if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
+                                    if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado)
+                                        nlist.add(list.get(i));
+                                }
                             }
                         }
-                        else {
-                            if (filterableString.toLowerCase().trim().equals(filterString.trim())) {
-                                if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado)
-                                    nlist.add(list.get(i));
+                        else{
+                            if (getCategoriaSeleccionada() != null && !getCategoriaSeleccionada().isEmpty()) {
+                                if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                        && list.get(i).getCategoria().toLowerCase().trim().equals(getCategoriaSeleccionada().toLowerCase())
+                                        && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim())) {
+                                    if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado)
+                                        nlist.add(list.get(i));
+                                }
+                            } else {
+                                if (filterableString.toLowerCase().trim().equals(filterString.trim())
+                                        && list.get(i).getDescripcion().toLowerCase().trim().contains(filterableEditText.toLowerCase().trim())) {
+                                    if (mesMov == mesSeleccionado1 && anyoMov == anyoSeleccionado)
+                                        nlist.add(list.get(i));
+                                }
                             }
                         }
                     }

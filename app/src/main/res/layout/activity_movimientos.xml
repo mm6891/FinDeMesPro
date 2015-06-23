@@ -53,12 +53,7 @@
             android:id="@+id/etSearchbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             />
-        <Spinner android:id="@+id/spCategoriaMovimiento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/lyLinearFiltroMov2"
@@ -81,6 +76,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="filtraGasto"/>
+		<Spinner android:id="@+id/spCategoriaMovimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
     <ListView
         android:id="@+id/listViewMov"

@@ -58,11 +58,12 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
             ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(devuelveAnyo());
 
             if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
-                ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
+                ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO) + ";"
+                        + ((EditText)etSearchbox).getText().toString().trim());
             else if(((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && !((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
-                ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
+                ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO)+ ";" + ((EditText)etSearchbox).getText().toString().trim());
             else
-                ((MovimientoAdapter)listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO));
+                ((MovimientoAdapter)listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO)+ ";" + ((EditText)etSearchbox).getText().toString().trim());
         }
     }
 
@@ -82,9 +83,11 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
 
     public void actualizarFiltroCategoria() {
         if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
-            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
+            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO)
+                    + ";" + ((EditText)etSearchbox).getText().toString().trim());
         else if(((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && !((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
-            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
+            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO) + ";"
+                    + ((EditText)etSearchbox).getText().toString().trim());
     }
 
     private ListView listViewMovs;
@@ -310,9 +313,10 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         ((CheckBox) findViewById(R.id.cbIconPlus)).setChecked(false);
         spFiltroCategoria.setEnabled(((CheckBox) findViewById(R.id.cbIconMinus)).isChecked());
         if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked())
-            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO));
+            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO) + ";" + ((EditText)etSearchbox).getText().toString().trim());
         else
-            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
+            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO) +
+                    ";" + ((EditText)etSearchbox).getText().toString().trim());
     }
     public void filtraIngreso(View v){
         //activamos combo categorias
@@ -336,9 +340,10 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         ((CheckBox) findViewById(R.id.cbIconMinus)).setChecked(false);
         spFiltroCategoria.setEnabled(((CheckBox) findViewById(R.id.cbIconPlus)).isChecked());
         if(!((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
-            ((MovimientoAdapter)listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO));
+            ((MovimientoAdapter)listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO) + ";" + ((EditText)etSearchbox).getText().toString().trim());
         else
-            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
+            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO) + ";"
+            + ((EditText)etSearchbox).getText().toString().trim());
     }
 
     public void filtraMesAnyo(View v, int mes, int anyo){
@@ -346,11 +351,14 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(anyo);
 
         if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
-            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
+            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO) +
+                    ";" + ((EditText)etSearchbox).getText().toString().trim());
         else if(((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && !((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
-            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
+            ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO) + ";"
+            + ((EditText)etSearchbox).getText().toString().trim());
         else
-            ((MovimientoAdapter)listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO));
+            ((MovimientoAdapter)listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_FILTRO_RESETEO)
+            + ";" +((EditText)etSearchbox).getText().toString().trim());
     }
 
     public String[] creaMeses(){

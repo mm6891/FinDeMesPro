@@ -10,7 +10,10 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.text.DateFormatSymbols;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -222,33 +225,51 @@ public class InformeAdapter extends BaseAdapter implements Filterable {
             for(Integer integer : treeMap.keySet()){
                 ArrayList<MovimientoItem> movsMes = informes.get(integer);
 
-                Double ingresos = new Double(0.00);
-                Double gastos = new Double(0.00);
-                Double saldo = new Double(0.00);
+                DecimalFormat df = new DecimalFormat("#.00");
+                df.setMaximumFractionDigits(2);
+                df.setMinimumFractionDigits(0);
+                df.setGroupingUsed(false);
 
+                BigDecimal ingresos = new BigDecimal(0.00);
+                ingresos = ingresos.setScale(2, BigDecimal.ROUND_DOWN);
+                BigDecimal gastos = new BigDecimal(0.00);
+                gastos = gastos.setScale(2, BigDecimal.ROUND_DOWN);
+                BigDecimal saldo = new BigDecimal(0.00);
+
+                try {
                 for(MovimientoItem mov : movsMes){
-                    if (mov.getTipoMovimiento().equals(context.getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO)))
-                        gastos += Double.valueOf(mov.getValor());
-                    else if (mov.getTipoMovimiento().equals(context.getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO)))
-                        ingresos += Double.valueOf(mov.getValor());
+                        if (mov.getTipoMovimiento().equals(context.getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO))) {
+                            if (mov.getValor().contains("."))
+                                gastos = gastos.add(BigDecimal.valueOf((Double) df.parse(mov.getValor())));
+                            else
+                                gastos = gastos.add(BigDecimal.valueOf((Long) df.parse(mov.getValor())));
+                        } else if (mov.getTipoMovimiento().equals(context.getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO))) {
+                            if(mov.getValor().contains("."))
+                                ingresos = ingresos.add(BigDecimal.valueOf((Double) df.parse(mov.getValor())));
+                            else
+                                ingresos = ingresos.add(BigDecimal.valueOf((Long) df.parse(mov.getValor())));
+                        }
                 }
 
                 //si es un gasto o ingreso sin valor, no se incluye en la lista
                 if(tipoMovimiento.equals(context.getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO)) &&
-                        gastos.equals(new Double(0.00)))
+                            gastos.equals(new BigDecimal(0.00)))
                     continue;
                 if(tipoMovimiento.equals(context.getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO)) &&
-                        ingresos.equals(new Double(0.00)))
+                            ingresos.equals(new BigDecimal(0.00)))
                     continue;
+                } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
                 InformeItem nuevoInforme = new InformeItem();
                 nuevoInforme.setTipoInforme(tipoMovimiento);
                 nuevoInforme.setMovimientos(movsMes);
 
-                nuevoInforme.setGastoValor(String.valueOf(gastos));
-                nuevoInforme.setIngresoValor(String.valueOf(ingresos));
-                saldo = ingresos - gastos;
-                nuevoInforme.setTotalValor(String.valueOf(saldo));
+                nuevoInforme.setGastoValor(df.format(gastos));
+                nuevoInforme.setIngresoValor(df.format(ingresos));
+                saldo = ingresos.subtract(gastos);
+                nuevoInforme.setTotalValor(df.format(saldo));
 
                 if(tipoPeriodo.equals(context.getResources().getString(R.string.TIPO_FILTRO_INFORME_DIARIO))) {
                     nuevoInforme.setPeriodoDesc(movsMes.get(0).getFecha());

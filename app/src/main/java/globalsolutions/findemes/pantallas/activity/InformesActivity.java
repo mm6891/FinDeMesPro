@@ -273,9 +273,10 @@ public class InformesActivity extends Activity {
                         if(informes.size() > 0) {
                             //load resumen
                             BigDecimal ingresos = new BigDecimal(0.00);
+                            ingresos = ingresos.setScale(2, BigDecimal.ROUND_DOWN);
                             BigDecimal gastos = new BigDecimal(0.00);
+                            gastos = gastos.setScale(2, BigDecimal.ROUND_DOWN);
                             BigDecimal saldo = new BigDecimal(0.00);
-
 
                             DecimalFormat df = new DecimalFormat("#.00");
                             df.setMaximumFractionDigits(2);
@@ -286,13 +287,20 @@ public class InformesActivity extends Activity {
                             if (((String) spTipoMovimiento.getSelectedItem()).equals(getResources().getString(R.string.TIPO_FILTRO_RESETEO))) {
                                 for (InformeItem inf : informes) {
                                     try {
+                                        if(inf.getIngresoValor().contains("."))
+                                            ingresos = ingresos.add(BigDecimal.valueOf((Double) df.parse(inf.getIngresoValor())));
+                                        else
                                         ingresos = ingresos.add(BigDecimal.valueOf((Long) df.parse(inf.getIngresoValor())));
+                                        if(inf.getGastoValor().contains("."))
+                                            gastos = gastos.add(BigDecimal.valueOf((Double) df.parse(inf.getGastoValor())));
+                                        else
                                         gastos = gastos.add(BigDecimal.valueOf((Long) df.parse(inf.getGastoValor())));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
                                 }
                                 saldo = ingresos.subtract(gastos);
+                                saldo = saldo.setScale(2, BigDecimal.ROUND_DOWN);
 
                                 ((TextView) findViewById(R.id.tvIngresosInformesValor)).setText(df.format(ingresos) + Util.formatoMoneda(getApplicationContext()));
                                 TextView tvGastosTotal = (TextView) findViewById(R.id.tvGastosInformesValor);
@@ -304,12 +312,16 @@ public class InformesActivity extends Activity {
                             else if (((String) spTipoMovimiento.getSelectedItem()).equals(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO))) {
                                 for (InformeItem inf : informes) {
                                     try {
+                                        if(inf.getGastoValor().contains("."))
+                                            gastos = gastos.add(BigDecimal.valueOf((Double) df.parse(inf.getGastoValor())));
+                                        else
                                         gastos = gastos.add(BigDecimal.valueOf((Long) df.parse(inf.getGastoValor())));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
                                 }
                                 saldo = ingresos.subtract(gastos);
+                                saldo = saldo.setScale(2, BigDecimal.ROUND_DOWN);
 
                                 ((TextView) findViewById(R.id.tvIngresosInformesValor)).setText(df.format(ingresos) + Util.formatoMoneda(getApplicationContext()));
                                 TextView tvGastosTotal = (TextView) findViewById(R.id.tvGastosInformesValor);
@@ -321,12 +333,16 @@ public class InformesActivity extends Activity {
                             else {
                                 for (InformeItem inf : informes) {
                                     try {
+                                        if(inf.getIngresoValor().contains("."))
+                                            ingresos = ingresos.add(BigDecimal.valueOf((Double) df.parse(inf.getIngresoValor())));
+                                        else
                                         ingresos = ingresos.add(BigDecimal.valueOf((Long) df.parse(inf.getIngresoValor())));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
                                 }
                                 saldo = ingresos.subtract(gastos);
+                                saldo = saldo.setScale(2, BigDecimal.ROUND_DOWN);
 
                                 ((TextView) findViewById(R.id.tvIngresosInformesValor)).setText(df.format(ingresos) + Util.formatoMoneda(getApplicationContext()));
                                 TextView tvGastosTotal = (TextView) findViewById(R.id.tvGastosInformesValor);

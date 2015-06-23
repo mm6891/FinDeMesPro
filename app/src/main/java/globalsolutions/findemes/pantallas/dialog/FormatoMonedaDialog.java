@@ -42,6 +42,7 @@ public class FormatoMonedaDialog extends DialogFragment {
         formatos.add("\u20ac");//euro
         formatos.add("\u00a3");//libra
         formatos.add("$");//dollar
+		formatos.add("R$");//real brasileiro
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(view.getContext(),
                 android.R.layout.simple_spinner_item, formatos);
