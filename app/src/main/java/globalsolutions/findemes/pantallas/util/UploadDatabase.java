@@ -58,20 +58,14 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                //final File tempDropboxDirectory = mContext.getCacheDir();
-                // Creating a temporal file.
-                /*File tempFileToUploadToDropbox = File.createTempFile("file", ".txt", tempDropboxDirectory);
-                FileWriter fileWriter = new FileWriter(tempFileToUploadToDropbox);
-                fileWriter.write("Hello World drom Android Dropbox Implementation Example!");
-                fileWriter.close();*/
+
                 // Uploading the newly created file to Dropbox.
-                FileInputStream fileInputStream = new FileInputStream(mFile);
-                mApi.putFile(mPath + mFile.getPath(), fileInputStream, mFile.length(), null, null);
-                //tempFileToUploadToDropbox.delete();
+              /*  FileInputStream fileInputStream = new FileInputStream(mFile);
+                mApi.putFile(mPath + mFile.getPath(), fileInputStream, mFile.length(), null, null);*/
 
                 // By creating a request, we get a handle to the putFile operation,
                 // so we can cancel it later if we want to
-               /* FileInputStream fis = new FileInputStream(mFile);
+                FileInputStream fis = new FileInputStream(mFile);
                 String path = mPath + mFile.getName();
                 mRequest = mApi.putFileOverwriteRequest(path, fis, mFile.length(),
                         new ProgressListener() {
@@ -90,7 +84,7 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
                 if (mRequest != null) {
                     mRequest.upload();
                     return true;
-                }*/
+                }
 
             } catch (DropboxUnlinkedException e) {
                 // This session wasn't authenticated properly or user unlinked
@@ -147,10 +141,10 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
         @Override
         protected void onPreExecute() {
             mDialog.setMax(100);
-            mDialog.setMessage("Uploading " + mFile.getName());
+            mDialog.setMessage(mContext.getResources().getString(R.string.Subiendo) + mFile.getName());
             mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             mDialog.setProgress(0);
-            mDialog.setButton(ProgressDialog.BUTTON_POSITIVE, "Cancel", new OnClickListener() {
+            mDialog.setButton(ProgressDialog.BUTTON_POSITIVE, mContext.getResources().getString(R.string.Cancelar), new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // This will cancel the putFile operation
@@ -165,7 +159,7 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
                 if (result) {
-                    showToast("File successfully uploaded");
+                    showToast(mContext.getResources().getString(R.string.Creado));
                 } else {
                     showToast(mErrorMsg);
                 }

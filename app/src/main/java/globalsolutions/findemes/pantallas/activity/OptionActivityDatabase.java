@@ -125,9 +125,6 @@ public class OptionActivityDatabase extends Activity {
                 fileDialog.setFileEndsWith(MyDatabaseHelper.DATABASE_NAME);
                 fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
                     public void fileSelected(File file) {
-                        // Start the remote authentication
-                        mApi.getSession().startOAuth2Authentication(OptionActivityDatabase.this);
-
                         UploadDatabase upload = new UploadDatabase(OptionActivityDatabase.this,getApplicationContext(), mApi, DATABASES_DIR, file);
                         upload.execute();
 
@@ -140,6 +137,8 @@ public class OptionActivityDatabase extends Activity {
         // We create a new AuthSession so that we can use the Dropbox API.
         AndroidAuthSession session = buildSession();
         mApi = new DropboxAPI<AndroidAuthSession>(session);
+        // Start the remote authentication
+        mApi.getSession().startOAuth2Authentication(OptionActivityDatabase.this);
     }
 
     @Override

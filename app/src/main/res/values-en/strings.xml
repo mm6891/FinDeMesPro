@@ -111,7 +111,6 @@
     <string name="TIPO_FILTRO_INFORME_SEMANAL">WEEKLY</string>
     <string name="Numero_Semana">Week nº</string>
     <string name="Formato_Moneda">Select the currency format preferred</string>
-    <string name="Version">1.0.0</string>
     <string name="AcercaDeDescripcion1">This is an application developed by Manuel Molero Busto</string>
     <string name="AcercaDeDescripcion2">The available translations are Spanish (Castilian), English and Brazilian Portuguese</string>
     <string name="AcercaDeDescripcion3">If you would like to help with the translation of the application to another language or improve the existing sends an email to the following address:</string>
@@ -129,5 +128,11 @@
     <string name="Cancelar">Cancel</string>
     <string name="Confirmar">Are you sure?</string>
     <string name="AcercaDeDescripcion4">This application has been translated by Jervânio Lima to to the Portuguese of Brazil</string>
-    
+    <string name="AYUDA_BASEDATOS_IMPORTACION_DROPBOX">Import database to DropBox</string>
+    <string name="ConfirmarExportar"></string>
+    <string name="Subiendo">Uploading</string>
+    <string name="Exportar">Export</string>
+    <string name="ArhivoSubido">File successfully uploaded</string>
+    <string name="Creando">Loading...</string>
+
 </resources>
