@@ -22,8 +22,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import globalsolutions.findemes.R;
+import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GastoDAO;
 import globalsolutions.findemes.database.dao.GrupoGastoDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.Gasto;
 import globalsolutions.findemes.database.model.GrupoGasto;
 import globalsolutions.findemes.pantallas.fragment.DatePickerFragment;
@@ -45,21 +47,18 @@ public class CuentasActivity extends FragmentActivity implements DatePickerDialo
             }
         });
 
-        //establecemos listener de limitador de digitos
-        ((EditText) findViewById(R.id.txtGasto)).setKeyListener(new MoneyValueFilter());
+        //cargamos el combo de cuentas
+        Spinner cuentaSp = (Spinner) findViewById(R.id.spCuentas);
 
-        //cargamos el combo de categorias
-        Spinner categoria = (Spinner) findViewById(R.id.spCategoriaGasto);
+        List<Cuenta> list = new ArrayList<Cuenta>();
+        CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
+        Cuenta[] cuentas = cuentaDAO.selectCuentas();
+        list = Arrays.asList(cuentas);
 
-        List<String> list = new ArrayList<String>();
-        GrupoGastoDAO grupoGastoDAO = new GrupoGastoDAO(getApplicationContext());
-        String[] categoriasGastos = grupoGastoDAO.selectGrupos();
-        list = Arrays.asList(categoriasGastos);
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+       /* ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoria.setAdapter(dataAdapter);
+        cuentaSp.setAdapter(dataAdapter);*/
 
         //cargamos el modal para seleccionar fecha
         Date date = new Date(System.currentTimeMillis());
