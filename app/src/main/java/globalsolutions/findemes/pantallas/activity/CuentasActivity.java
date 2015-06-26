@@ -17,22 +17,28 @@ import android.widget.TextView;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 import globalsolutions.findemes.R;
 import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GastoDAO;
-import globalsolutions.findemes.database.dao.GrupoGastoDAO;
-import globalsolutions.findemes.database.model.Cuenta;
+import globalsolutions.findemes.database.model.CuentaItem;
 import globalsolutions.findemes.database.model.Gasto;
 import globalsolutions.findemes.database.model.GrupoGasto;
 import globalsolutions.findemes.pantallas.fragment.DatePickerFragment;
-import globalsolutions.findemes.pantallas.util.MoneyValueFilter;
 import globalsolutions.findemes.pantallas.util.Util;
 
-public class CuentasActivity extends FragmentActivity implements DatePickerDialog.OnDateSetListener {
+public class CuentasActivity extends FragmentActivity {
+
+    private TextView tvNombreCuenta;
+    private TextView tvNumeroCuenta;
+    private TextView tvFechaCuenta;
+    private Spinner cuentaSp;
+
+    //this counts how many Spinner's are on the UI
+    private int mSpinnerCount=0;
+    //this counts how many Spinner's have been initialized
+    private int mSpinnerInitializedCount=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,102 +53,54 @@ public class CuentasActivity extends FragmentActivity implements DatePickerDialo
             }
         });
 
+
+        tvNombreCuenta = (TextView) findViewById(R.id.tvNombreCuenta);
+        tvNumeroCuenta = (TextView) findViewById(R.id.tvNumeroCuenta);
+        tvFechaCuenta = (TextView) findViewById(R.id.tvFechaCuenta);
+
         //cargamos el combo de cuentas
-        Spinner cuentaSp = (Spinner) findViewById(R.id.spCuentas);
+        cuentaSp = (Spinner) findViewById(R.id.spCuentas);
 
-        List<Cuenta> list = new ArrayList<Cuenta>();
         CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
-        Cuenta[] cuentas = cuentaDAO.selectCuentas();
-        list = Arrays.asList(cuentas);
+        final ArrayList<CuentaItem> list = cuentaDAO.selectCuentasItems();
 
-       /* ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
+        String[] nombres = new String[list.size() + 1];
+        nombres [0] = "";
+        for(int i = 0; i < list.size(); i++) {
+            int pos = i + 1;
+            nombres[pos] = list.get(i).getNombre();
+        }
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, nombres);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cuentaSp.setAdapter(dataAdapter);*/
+        cuentaSp.setAdapter(dataAdapter);
 
-        //cargamos el modal para seleccionar fecha
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat sdfDia = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat sdfHora = new SimpleDateFormat("kk:mm");
-        String mTimeText = sdfDia.format(date);
-        String mTimeHora = sdfHora.format(date);
-
-        ((TextView) findViewById(R.id.tvDiaAG)).setText(mTimeText);
-        ((TextView) findViewById(R.id.tvHoraAG)).setText(mTimeHora);
-
-        ImageButton datePicker = (ImageButton) findViewById(R.id.myDatePickerButtonAG);
-
-        datePicker.setOnClickListener(new AdapterView.OnClickListener() {
+        mSpinnerCount++;
+        cuentaSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                showDatePickerDialog(v);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mSpinnerInitializedCount < mSpinnerCount)
+                {
+                    mSpinnerInitializedCount++;
+                }
+                else {
+                    String cuentaSelected = cuentaSp.getSelectedItem() != null ? (String) cuentaSp.getSelectedItem() : "";
+                    for(int i = 0; i < list.size(); i++) {
+                       if(cuentaSelected.equals(list.get(i).getNombre())){
+                           tvNombreCuenta.setText(list.get(i).getNombre());
+                           tvNumeroCuenta.setText(list.get(i).getNumero());
+                           tvFechaCuenta.setText(list.get(i).getFecha());
+                       }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-    }
 
-    //dialogos
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("movimiento", getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
-        newFragment.setArguments(bundle);
-        newFragment.show(getFragmentManager(),"Fecha");
-    }
-
-    //eventos botones guardar gasto e ingreso
-    public void guardarGasto(View view) {
-        //descripcion , valor , fecha
-        String valor = (String)((EditText) findViewById(R.id.txtGasto)).getText().toString();
-        if(valor == null || valor.isEmpty()) {
-            ((EditText) findViewById(R.id.txtGasto)).setError(getResources().getString(R.string.Validacion_Cantidad));
-            return;
-        }
-        String descripcion = (String)((EditText) findViewById(R.id.txtDecripcion)).getText().toString();
-        if(descripcion == null || descripcion.isEmpty()) {
-            ((EditText) findViewById(R.id.txtDecripcion)).setError(getResources().getString(R.string.Validacion_Descripcion));
-            return;
-        }
-        //obtenemos categoria de gasto
-        String categoriaGasto = (String)((Spinner) findViewById(R.id.spCategoriaGasto)).getSelectedItem();
-        if(categoriaGasto != null && !categoriaGasto.isEmpty()) {
-            Gasto nuevoGasto = new Gasto();
-            nuevoGasto.setDescripcion(descripcion);
-            nuevoGasto.setValor(valor);
-            String fecha = (String) ((TextView) findViewById(R.id.tvDiaAG)).getText();
-            String hora = (String) ((TextView) findViewById(R.id.tvHoraAG)).getText();
-            nuevoGasto.setFecha(fecha + " " + hora);
-
-            GrupoGasto grupo = new GrupoGasto();
-            grupo.setGrupo(categoriaGasto);
-            nuevoGasto.setGrupoGasto(grupo);
-            GastoDAO gastoDAO = new GastoDAO(getApplicationContext());
-            gastoDAO.createRecords(nuevoGasto);
-            Util.showToast(view.getContext(),getResources().getString(R.string.Creado));
-            clear();
-        }
-        else{
-            Util.showToast(view.getContext(),getResources().getString(R.string.Selecciona_categoria));
-        }
-    }
-
-    private void clear() {
-        ((EditText) findViewById(R.id.txtGasto)).setText("");
-        ((EditText) findViewById(R.id.txtDecripcion)).setText("");
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int day) {
-        final Calendar c = Calendar.getInstance();
-        c.set(year,month,day);
-
-        Date date = new Date(c.getTimeInMillis());
-        SimpleDateFormat sdfDia = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat sdfHora = new SimpleDateFormat("kk:mm");
-        String mTimeText = sdfDia.format(date);
-        String mTimeHora = sdfHora.format(date);
-
-        ((TextView) findViewById(R.id.tvDiaAG)).setText(mTimeText);
-        ((TextView) findViewById(R.id.tvHoraAG)).setText(mTimeHora);
     }
 
     @Override

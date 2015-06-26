@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 import globalsolutions.findemes.database.model.Cuenta;
+import globalsolutions.findemes.database.model.CuentaItem;
 import globalsolutions.findemes.database.model.Registro;
 import globalsolutions.findemes.database.model.RegistroItem;
 import globalsolutions.findemes.database.util.MyDatabaseHelper;
@@ -62,6 +63,28 @@ public class CuentaDAO {
             nuevaCuenta.setFecha(mCursor.getString(3));
 
             ret[i] = nuevaCuenta;
+            i++;
+            mCursor.moveToNext();
+        }
+        return ret; // iterate to get each value.
+    }
+
+    public ArrayList<CuentaItem> selectCuentasItems() {
+        ArrayList<CuentaItem> ret;
+        String[] cols = new String[] {CUENTAS_ID,CUENTAS_NOMBRE, CUENTAS_NUMERO, CUENTAS_FECHA};
+        Cursor mCursor = database.query(true, CUENTAS_TABLA,cols,null
+                , null, null, null, null, null);
+        ret = new ArrayList<CuentaItem>(mCursor.getCount());
+        int i = 0;
+        mCursor.moveToFirst();
+        while (mCursor.isAfterLast() == false) {
+            CuentaItem nuevoRegistro = new CuentaItem();
+            nuevoRegistro.set_id(mCursor.getInt(0));
+            nuevoRegistro.setNombre(mCursor.getString(1));
+            nuevoRegistro.setNumero(mCursor.getString(2));
+            nuevoRegistro.setFecha(mCursor.getString(3));
+
+            ret.add(nuevoRegistro);
             i++;
             mCursor.moveToNext();
         }
