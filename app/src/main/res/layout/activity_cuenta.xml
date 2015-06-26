@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".IngresoActivity">
+    tools:context=".CuentasActivity">
     >
     <LinearLayout
         android:id="@+id/lyBackButton"
@@ -40,69 +40,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/lyLinear2"
+    <ListView
+        android:id="@+id/listViewCuentas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/NombreCuenta"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-        <TextView
-            android:id="@+id/tvNombreCuenta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/lyLinear3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear2">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/NumeroCuenta"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-        <TextView
-            android:id="@+id/tvNumeroCuenta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/lyLinear4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear3">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/FechaCuenta"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-        <TextView
-            android:id="@+id/tvFechaCuenta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lyLinear1"
+        android:layout_above="@+id/btnNuevaCuenta" />
     <ImageButton
         android:id="@+id/btnNuevaCuenta"
         android:background="@android:color/white"
@@ -110,6 +53,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:src="@drawable/newregistry"
-        android:layout_below="@+id/lyLinear4"
+        android:layout_alignParentBottom="true"
         />
 </RelativeLayout>

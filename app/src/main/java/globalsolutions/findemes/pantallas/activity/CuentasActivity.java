@@ -1,5 +1,6 @@
 package globalsolutions.findemes.pantallas.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -25,15 +26,18 @@ import globalsolutions.findemes.database.dao.GastoDAO;
 import globalsolutions.findemes.database.model.CuentaItem;
 import globalsolutions.findemes.database.model.Gasto;
 import globalsolutions.findemes.database.model.GrupoGasto;
+import globalsolutions.findemes.pantallas.dialog.NuevaCuentaDialog;
 import globalsolutions.findemes.pantallas.fragment.DatePickerFragment;
 import globalsolutions.findemes.pantallas.util.Util;
 
-public class CuentasActivity extends FragmentActivity {
+public class CuentasActivity extends FragmentActivity implements NuevaCuentaDialog.ONuevaCuentaDialogListener
+        /*EditCuentaDialog.OnEditCuentaDialogListener*/{
 
     private TextView tvNombreCuenta;
     private TextView tvNumeroCuenta;
     private TextView tvFechaCuenta;
     private Spinner cuentaSp;
+    private ImageButton btnNuevaCuenta;
 
     //this counts how many Spinner's are on the UI
     private int mSpinnerCount=0;
@@ -101,6 +105,40 @@ public class CuentasActivity extends FragmentActivity {
             }
         });
 
+        btnNuevaCuenta = (ImageButton) findViewById(R.id.btnNuevaCuenta);
+        btnNuevaCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+    }
+
+    //muestra el modal de nuevo registro frecuente
+    public void showNuevaCuentaDialog() {
+        DialogFragment newFragment = new NuevaCuentaDialog();
+        newFragment.show(getFragmentManager(),"NUEVA CUENTA");
+    }
+
+    //muestra el modal de edicion de registro frecuente
+    public void showEditCuentaDialog(Bundle bundle) {
+        /*DialogFragment newFragment = new EditCuentaDialog();
+        newFragment.setArguments(bundle);
+        newFragment.show(getFragmentManager(),"EDITAR CUENTA");*/
+    }
+
+    @Override
+    public void ONuevaCuentaDialogSubmit(String result) {
+        /*if(result.equals(String.valueOf(Activity.RESULT_OK)))
+            ((RegistroAdapter)listViewReg.getAdapter()).updateReceiptsList(new RegistroDAO(getApplicationContext()).selectRegistrosItems());*/
+    }
+
+    //@Override
+    public void OnEditCuentaDialogSubmit(String result) {
+       /* if(result.equals(String.valueOf(Activity.RESULT_OK)))
+            ((RegistroAdapter)listViewReg.getAdapter()).updateReceiptsList(new RegistroDAO(getApplicationContext()).selectRegistrosItems());*/
     }
 
     @Override
