@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,8 +37,8 @@ public class CuentasActivity extends FragmentActivity implements NuevaCuentaDial
     private TextView tvNombreCuenta;
     private TextView tvNumeroCuenta;
     private TextView tvFechaCuenta;
-    private Spinner cuentaSp;
     private ImageButton btnNuevaCuenta;
+    private ListView listViewCuentas;
 
     //this counts how many Spinner's are on the UI
     private int mSpinnerCount=0;
@@ -62,48 +63,11 @@ public class CuentasActivity extends FragmentActivity implements NuevaCuentaDial
         tvNumeroCuenta = (TextView) findViewById(R.id.tvNumeroCuenta);
         tvFechaCuenta = (TextView) findViewById(R.id.tvFechaCuenta);
 
-        //cargamos el combo de cuentas
-        cuentaSp = (Spinner) findViewById(R.id.spCuentas);
-
         CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
-        final ArrayList<CuentaItem> list = cuentaDAO.selectCuentasItems();
+        ArrayList<CuentaItem> list = cuentaDAO.selectCuentasItems();
 
-        String[] nombres = new String[list.size() + 1];
-        nombres [0] = "";
-        for(int i = 0; i < list.size(); i++) {
-            int pos = i + 1;
-            nombres[pos] = list.get(i).getNombre();
-        }
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, nombres);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cuentaSp.setAdapter(dataAdapter);
-
-        mSpinnerCount++;
-        cuentaSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (mSpinnerInitializedCount < mSpinnerCount)
-                {
-                    mSpinnerInitializedCount++;
-                }
-                else {
-                    String cuentaSelected = cuentaSp.getSelectedItem() != null ? (String) cuentaSp.getSelectedItem() : "";
-                    for(int i = 0; i < list.size(); i++) {
-                       if(cuentaSelected.equals(list.get(i).getNombre())){
-                           tvNombreCuenta.setText(list.get(i).getNombre());
-                           tvNumeroCuenta.setText(list.get(i).getNumero());
-                           tvFechaCuenta.setText(list.get(i).getFecha());
-                       }
-                    }
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        listViewCuentas = (ListView) findViewById(R.id.listViewCuentas);
+        //listViewCuentas.setAdapter(new CuentaAdapter(getApplicationContext(), list));
 
         btnNuevaCuenta = (ImageButton) findViewById(R.id.btnNuevaCuenta);
         btnNuevaCuenta.setOnClickListener(new View.OnClickListener() {
