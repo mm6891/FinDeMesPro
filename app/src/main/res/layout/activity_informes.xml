@@ -67,6 +67,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:layout_marginLeft="@dimen/margin"
+        android:layout_marginRight="@dimen/margin"
         android:text="@string/Graficar"
         android:drawableTop="@drawable/combochart"
         android:textStyle="bold"

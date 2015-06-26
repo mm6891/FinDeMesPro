@@ -21,7 +21,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "DBFinDeMes";
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     public static String DB_PATH = "";
 
     // Database creation sql statement
@@ -45,7 +45,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "fecha TIMESTAMP NOT NULL DEFAULT current_timestamp," +
                     "_idRegistro integer," +
                     "grupoingreso text not null," +
-                    "  FOREIGN KEY(grupoingreso) REFERENCES Grupo_Ingresos(_id));";
+                    "_idCuenta integer not null," +
+                    "  FOREIGN KEY(grupoingreso) REFERENCES Grupo_Ingresos(_id)," +
+                    "  FOREIGN KEY(_idCuenta) REFERENCES Cuentas(_id));";
 
     private static final String CREATE_TABLE_GRUPO_INGRESOS =
             "create table Grupo_Ingresos( _id integer primary key," +
@@ -68,6 +70,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "activo integer not null," +
                     "fecha TIMESTAMP NOT NULL DEFAULT current_timestamp);";
 
+    private static final String CREATE_TABLE_CUENTAS =
+            "create table Cuentas( _id integer primary key," +
+                    "nombre text not null," +
+                    "numeroCuenta text," +
+                    "fecha TIMESTAMP NOT NULL DEFAULT current_timestamp);";
+
     public MyDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -81,6 +89,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             database.execSQL(CREATE_TABLE_GRUPO_INGRESOS);
             database.execSQL(CREATE_TABLE_REGISTROS);
             database.execSQL(CREATE_TABLE_PASSWORD);
+            database.execSQL(CREATE_TABLE_CUENTAS);
     }
 
     // Method is called during an upgrade of the database,
@@ -95,6 +104,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS Grupo_Ingresos");
         database.execSQL("DROP TABLE IF EXISTS Registros");
         database.execSQL("DROP TABLE IF EXISTS Password");
+        database.execSQL("DROP TABLE IF EXISTS Cuentas");
 
         onCreate(database);
     }

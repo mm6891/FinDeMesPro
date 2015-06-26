@@ -7,10 +7,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import com.dropbox.client2.DropboxAPI.UploadRequest;
@@ -58,11 +63,6 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-
-                // Uploading the newly created file to Dropbox.
-              /*  FileInputStream fileInputStream = new FileInputStream(mFile);
-                mApi.putFile(mPath + mFile.getPath(), fileInputStream, mFile.length(), null, null);*/
-
                 // By creating a request, we get a handle to the putFile operation,
                 // so we can cancel it later if we want to
                 FileInputStream fis = new FileInputStream(mFile);
@@ -72,7 +72,7 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
                             @Override
                             public long progressInterval() {
                                 // Update the progress bar every half-second or so
-                                return 500;
+                                return 100;
                             }
 
                             @Override
@@ -83,6 +83,26 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
 
                 if (mRequest != null) {
                     mRequest.upload();
+                    //compartir enlace
+                    // Get the metadata for a directory
+                    /*DropboxAPI.Entry dirent = mApi.metadata(mPath, 1000, null, true, null);
+
+                    for (DropboxAPI.Entry ent : dirent.contents) {
+
+                        String shareAddress = null;
+                        if (!ent.isDir) {
+                            DropboxAPI.DropboxLink shareLink = mApi.share(ent.path);
+                            shareAddress = getShareURL(shareLink.url).replaceFirst("https://www", "https://dl");
+                            //Log.d(TAG, "dropbox share link " + shareAddress);
+                            //Envio de correo
+                            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            emailIntent.setType("message/rfc822");
+                            //emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{txtMailTo.getText().toString()});
+                            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, mContext.getResources().getString(R.string.AsuntoDropbox));
+                            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareAddress);
+                            mContext.startActivity(Intent.createChooser(emailIntent, "Sending email..."));
+                        }
+                    }*/
                     return true;
                 }
 
@@ -169,6 +189,28 @@ import globalsolutions.findemes.pantallas.activity.OptionActivityDatabase;
         private void showToast(String msg) {
             Toast error = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
             error.show();
+        }
+
+        String getShareURL(String strURL) {
+            URLConnection conn = null;
+            String redirectedUrl = null;
+            try {
+                URL inputURL = new URL(strURL);
+                conn = inputURL.openConnection();
+                conn.connect();
+
+                InputStream is = conn.getInputStream();
+                System.out.println("Redirected URL: " + conn.getURL());
+                redirectedUrl = conn.getURL().toString();
+                is.close();
+
+            } catch (MalformedURLException e) {
+                //Log.d(TAG, "Please input a valid URL");
+            } catch (IOException ioe) {
+                //Log.d(TAG, "Can not connect to the URL");
+            }
+
+            return redirectedUrl;
         }
     }
 

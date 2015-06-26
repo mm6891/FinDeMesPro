@@ -143,10 +143,12 @@ public class OptionActivityDatabase extends Activity {
 
     @Override
     public void onBackPressed() {
+        logOut();
         backActivity();
     }
 
     private void backActivity(){
+        logOut();
         Intent in = new Intent(OptionActivityDatabase.this, OpcionesActivity.class);
         startActivity(in);
         setResult(RESULT_OK);
@@ -154,33 +156,19 @@ public class OptionActivityDatabase extends Activity {
     }
 
     //metodos y utilidades dropbox
-    /**
-     * Shows keeping the access keys returned from Trusted Authenticator in a local
-     * store, rather than storing user name & password, and re-authenticating each
-     * time (which is not to be done, ever).
-     */
-    private void loadAuth(AndroidAuthSession session) {
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
-        String key = prefs.getString(ACCESS_KEY_NAME, null);
-        String secret = prefs.getString(ACCESS_SECRET_NAME, null);
-        if (key == null || secret == null || key.length() == 0 || secret.length() == 0) return;
-
-        if (key.equals("oauth2:")) {
-            // If the key is set to "oauth2:", then we can assume the token is for OAuth 2.
-            session.setOAuth2AccessToken(secret);
-        } else {
-            // Still support using old OAuth 1 tokens.
-            session.setAccessTokenPair(new AccessTokenPair(key, secret));
-        }
-    }
-
     private AndroidAuthSession buildSession() {
-        AppKeyPair appKeyPair = new AppKeyPair(appKey, appSecret);
 
+        AppKeyPair appKeyPair = new AppKeyPair(appKey, appSecret);
         AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
         //loadAuth(session);
         session.setOAuth2AccessToken(appSecret);
         return session;
+    }
+
+
+    private void logOut() {
+        // Remove credentials from the session
+        mApi.getSession().unlink();
     }
 
     @Override
@@ -192,7 +180,7 @@ public class OptionActivityDatabase extends Activity {
                 // Required to complete auth, sets the access token on the session
                 mApi.getSession().finishAuthentication();
 
-                String accessToken = mApi.getSession().getOAuth2AccessToken();
+                //String accessToken = mApi.getSession().getOAuth2AccessToken();
             } catch (IllegalStateException e) {
                 Util.showToast(getApplicationContext(), e.getMessage());
             }

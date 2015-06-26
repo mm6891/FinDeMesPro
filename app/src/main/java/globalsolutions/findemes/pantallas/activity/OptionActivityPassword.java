@@ -94,7 +94,7 @@ public class OptionActivityPassword extends Activity {
             public void onClick(View v) {
                 if(validaCamposPasswordLocal() && validaCamposEnvioCorreo()) {
                     try {
-                    //Envio de correo
+                        //Envio de correo
                         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
                         emailIntent.setType("message/rfc822");
                         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{txtMailTo.getText().toString()});
@@ -107,17 +107,6 @@ public class OptionActivityPassword extends Activity {
                         Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_envio));
                         return;
                     }
-                    /*try {
-                        GMailSender sender = new GMailSender("findemesapp@gmail.com", "esta50es");
-                        sender.sendMail(getResources().getString(R.string.Asunto),
-                                getResources().getString(R.string.Cuerpo) + " " + txtPassword.getText().toString(),
-                                "findemesapp@gmail.com",
-                                txtMailTo.getText().toString(), getApplicationContext());
-                        Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_ok));
-                    } catch (Exception e) {
-                        Util.showToast(getApplicationContext(), getResources().getString(R.string.Validacion_Correo_envio));
-                        return;
-                    }*/
                 }
             }
         });

@@ -6,6 +6,8 @@
     <string name="Gastos">Gastos:</string>
     <string name="Saldo">Saldo:</string>
     <string name="Descripcion">Descripción:</string>
+    <string name="NombreCuenta">Nombre:</string>
+    <string name="NumeroCuenta">Número:</string>
     <string name="Ingreso">Ingreso:</string>
     <string name="Ingresos">Ingresos:</string>
     <string name="Guardar">Guardar</string>
@@ -18,6 +20,8 @@
     <string name="Cancelar">Cancelar</string>
     <string name="MENU_GASTOS">Gasto</string>
     <string name="MENU_INGRESOS">Ingreso</string>
+    <string name="MENU_OBJETIVOS">Objetivos</string>
+    <string name="MENU_CUENTAS">Cuentas</string>
     <string name="MENU_MOVIMIENTOS">Movimientos</string>
     <string name="MENU_INFORMES">Informes</string>
     <string name="MENU_REGISTROS">Registros</string>
@@ -77,12 +81,14 @@
     <string name="ConfirmarExportar">El archivo se exportará en /Download/findemes/</string>
     <string name="Salir">¿Salir?</string>
     <string name="Asunto">Contraseña app FinDeMes</string>
+    <string name="AsuntoDropbox">Enlace al backup de tu base de datos en dropbox. App Fin de Mes</string>
     <string name="AsuntoExportar">Exportación pdf app FinDeMes</string>
     <string name="CuerpoExportar">Pdf adjuntado correctamente.</string>
     <string name="Cuerpo">Esta es tu contraseña para acceder a la app FinDeMes:</string>
     <string name="Enviar">Enviar</string>
     <string name="MovimientoFrecuente">Los movimientos frecuentes no se pueden editar desde Movimientos</string>
     <string name="FechaActivacion">Fecha de Activación:</string>
+    <string name="FechaCuenta">Fecha:</string>
     <string name="Formato">Selecciona el formato de fecha preferido</string>
     <string name="Formato_Moneda">Selecciona el formato de moneda preferido</string>
     <string name="Numero_Semana">Semana nº</string>

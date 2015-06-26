@@ -46,6 +46,10 @@ public class MainActivity extends Activity {
     private Button btnInformes;
     private Button btnMovimientosFrecuentes;
     private Button btnOpciones;
+
+    private Button btnCuentas;
+    private Button btnObjetivos;
+
     private GridLayout gv;
 
     private ImageButton btnCalc;
@@ -113,6 +117,26 @@ public class MainActivity extends Activity {
         //REGISTROS FRECUENTES
         btnMovimientosFrecuentes = (Button) findViewById(R.id.imgBtn11);
         btnMovimientosFrecuentes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RegistrosActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        //CUENTAS
+        btnCuentas = (Button) findViewById(R.id.imgBtn20);
+        btnCuentas.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CuentasActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        //OBJETIVOS, PROYECCIONES
+        btnObjetivos = (Button) findViewById(R.id.imgBtn21);
+        btnObjetivos.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RegistrosActivity.class);
                 startActivity(intent);
