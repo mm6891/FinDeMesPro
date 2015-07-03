@@ -29,7 +29,7 @@
             android:layout_marginLeft="@dimen/margin"
             android:textStyle="bold" />
     </LinearLayout>
-    <LinearLayout
+  <!--  <LinearLayout
         android:id="@+id/lyLinear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,12 +39,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
-    </LinearLayout>
+    </LinearLayout>-->
     <ListView
         android:id="@+id/listViewCuentas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/lyLinear1"
+        android:layout_below="@+id/lyBackButton"
         android:layout_above="@+id/btnNuevaCuenta" />
     <ImageButton
         android:id="@+id/btnNuevaCuenta"

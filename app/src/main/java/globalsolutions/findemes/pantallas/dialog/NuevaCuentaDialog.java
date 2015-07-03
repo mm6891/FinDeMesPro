@@ -56,7 +56,7 @@ public class NuevaCuentaDialog extends DialogFragment {
             throw new ClassCastException("Calling Fragment must implement ONuevaCuentaDialogListener");
         }
 
-        final View view = inflater.inflate(R.layout.nuevo_registro_dialog, container, false);
+        final View view = inflater.inflate(R.layout.nueva_cuenta_dialog, container, false);
 
         //establecemos listener de limitador de digitos
         ((EditText) view.findViewById(R.id.txtValor)).setKeyListener(new MoneyValueFilter());

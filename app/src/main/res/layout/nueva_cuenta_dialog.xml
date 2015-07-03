@@ -20,8 +20,8 @@
             android:textStyle="bold"
             android:textSize="@dimen/text_size"
             />
-        <TextView
-            android:id="@+id/tvNombreCuentaDialog"
+        <EditText
+            android:id="@+id/etNombreCuentaDialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -41,8 +41,8 @@
             android:textStyle="bold"
             android:textSize="@dimen/text_size"
             />
-        <TextView
-            android:id="@+id/tvNumeroCuentaDialog"
+        <EditText
+            android:id="@+id/etNumeroCuentaDialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -54,30 +54,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear3">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/FechaCuenta"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-        <TextView
-            android:id="@+id/tvFechaCuentaDialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/lyLinear5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="@dimen/margin"
         android:gravity="center"
-        android:layout_below="@+id/lyLinear4">
+        android:layout_below="@+id/lyLinear3">
         <ImageButton
             android:id="@+id/btnGuardarCuenta"
             android:background="@android:color/white"

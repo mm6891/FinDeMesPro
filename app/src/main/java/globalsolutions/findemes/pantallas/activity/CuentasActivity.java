@@ -27,6 +27,7 @@ import globalsolutions.findemes.database.dao.GastoDAO;
 import globalsolutions.findemes.database.model.CuentaItem;
 import globalsolutions.findemes.database.model.Gasto;
 import globalsolutions.findemes.database.model.GrupoGasto;
+import globalsolutions.findemes.pantallas.adapter.CuentaAdapter;
 import globalsolutions.findemes.pantallas.dialog.NuevaCuentaDialog;
 import globalsolutions.findemes.pantallas.fragment.DatePickerFragment;
 import globalsolutions.findemes.pantallas.util.Util;
@@ -67,7 +68,7 @@ public class CuentasActivity extends FragmentActivity implements NuevaCuentaDial
         ArrayList<CuentaItem> list = cuentaDAO.selectCuentasItems();
 
         listViewCuentas = (ListView) findViewById(R.id.listViewCuentas);
-        //listViewCuentas.setAdapter(new CuentaAdapter(getApplicationContext(), list));
+        listViewCuentas.setAdapter(new CuentaAdapter(getApplicationContext(), list));
 
         btnNuevaCuenta = (ImageButton) findViewById(R.id.btnNuevaCuenta);
         btnNuevaCuenta.setOnClickListener(new View.OnClickListener() {
