@@ -24,8 +24,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import globalsolutions.findemes.R;
+import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GastoDAO;
 import globalsolutions.findemes.database.dao.GrupoGastoDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.Gasto;
 import globalsolutions.findemes.database.model.GrupoGasto;
 import globalsolutions.findemes.pantallas.fragment.DatePickerFragment;
@@ -49,6 +51,19 @@ public class GastoActivity extends FragmentActivity implements DatePickerDialog.
 
         //establecemos listener de limitador de digitos
         ((EditText) findViewById(R.id.txtGasto)).setKeyListener(new MoneyValueFilter());
+
+        //cargamos el combo de cuentas
+        Spinner cuenta = (Spinner) findViewById(R.id.spCuentaGastoAc);
+
+        List<Cuenta> listCuentas = new ArrayList<Cuenta>();
+        CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
+        Cuenta[] cuentasArray = cuentaDAO.selectCuentas();
+        listCuentas = Arrays.asList(cuentasArray);
+
+        ArrayAdapter<Cuenta> cuentaAdapter = new ArrayAdapter<Cuenta>(this,
+                android.R.layout.simple_spinner_item, listCuentas);
+        cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cuenta.setAdapter(cuentaAdapter);
 
         //cargamos el combo de categorias
         Spinner categoria = (Spinner) findViewById(R.id.spCategoriaGasto);
@@ -105,15 +120,26 @@ public class GastoActivity extends FragmentActivity implements DatePickerDialog.
             ((EditText) findViewById(R.id.txtDecripcion)).setError(getResources().getString(R.string.Validacion_Descripcion));
             return;
         }
+
+        //obtenemos cuenta
+        Cuenta cuenta = (Cuenta)((Spinner) findViewById(R.id.spCuentaGastoAc)).getSelectedItem();
+        if( cuenta == null){
+            Util.showToast(view.getContext(),getResources().getString(R.string.Selecciona_cuenta));
+            return;
+        }
         //obtenemos categoria de gasto
         String categoriaGasto = (String)((Spinner) findViewById(R.id.spCategoriaGasto)).getSelectedItem();
-        if(categoriaGasto != null && !categoriaGasto.isEmpty()) {
+        if( categoriaGasto != null && !categoriaGasto.isEmpty()) {
             Gasto nuevoGasto = new Gasto();
             nuevoGasto.setDescripcion(descripcion);
             nuevoGasto.setValor(valor);
             String fecha = (String) ((TextView) findViewById(R.id.tvDiaAG)).getText();
             String hora = (String) ((TextView) findViewById(R.id.tvHoraAG)).getText();
             nuevoGasto.setFecha(fecha + " " + hora);
+
+            //cuenta a la que cargamos el gasto
+            Cuenta cuentaGasto = (Cuenta)((Spinner) findViewById(R.id.spCuentaGastoAc)).getSelectedItem();
+            nuevoGasto.setCuenta(cuentaGasto);
 
             GrupoGasto grupo = new GrupoGasto();
             grupo.setGrupo(categoriaGasto);

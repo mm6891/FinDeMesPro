@@ -28,8 +28,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import globalsolutions.findemes.R;
+import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GastoDAO;
 import globalsolutions.findemes.database.dao.GrupoGastoDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.Gasto;
 import globalsolutions.findemes.database.model.GrupoGasto;
 import globalsolutions.findemes.pantallas.util.MoneyValueFilter;
@@ -75,6 +77,19 @@ public class GastoDialog extends DialogFragment implements DatePickerDialog.OnDa
         //establecemos listener de limitador de digitos
         ((EditText) view.findViewById(R.id.txtGasto)).setKeyListener(new MoneyValueFilter());
 
+        //cargamos el combo de cuentas
+        Spinner cuenta = (Spinner) view.findViewById(R.id.spCuentaGasto);
+
+        List<Cuenta> listCuentas = new ArrayList<Cuenta>();
+        CuentaDAO cuentaDAO = new CuentaDAO(view.getContext());
+        Cuenta[] cuentasArray = cuentaDAO.selectCuentas();
+        listCuentas = Arrays.asList(cuentasArray);
+
+        ArrayAdapter<Cuenta> cuentaAdapter = new ArrayAdapter<Cuenta>(view.getContext(),
+                android.R.layout.simple_spinner_item, listCuentas);
+        cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cuenta.setAdapter(cuentaAdapter);
+
         //cargamos el combo de categorias
         Spinner categoria = (Spinner) view.findViewById(R.id.spCategoriaGasto);
 
@@ -94,11 +109,14 @@ public class GastoDialog extends DialogFragment implements DatePickerDialog.OnDa
         String categoriaStr = getArguments().getString("categoria");
         String fecha = getArguments().getString("fecha");
         String _id = getArguments().getString("_id");
+        String cuentaStr = getArguments().getString("cuenta");
 
         ((EditText) view.findViewById(R.id.txtGasto)).setText(valor);
         ((EditText) view.findViewById(R.id.txtDecripcion)).setText(descripcion);
          int spinnerPostion = dataAdapter.getPosition(categoriaStr);
         categoria.setSelection(spinnerPostion);
+       /* int spinnerPostionCuenta = cuentaAdapter.getPosition(cuentaStr);
+        categoria.setSelection(spinnerPostionCuenta);*/
 
         ((TextView) view.findViewById(R.id.tvDiaEG)).setText(fecha.split(" ")[0]);
         ((TextView) view.findViewById(R.id.tvHoraEG)).setText(fecha.split(" ")[1]);

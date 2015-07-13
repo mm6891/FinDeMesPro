@@ -10,6 +10,15 @@ public class Gasto {
     String descripcion;
     String valor;
     String fecha;
+    Cuenta cuenta;
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
 
     public int get_idRegistro() {
         return _idRegistro;

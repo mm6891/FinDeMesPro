@@ -8,6 +8,7 @@
     <string name="Descripcion">Descripción:</string>
     <string name="NombreCuenta">Nombre:</string>
     <string name="NumeroCuenta">Número:</string>
+    <string name="Cuenta">Cuenta:</string>
     <string name="Ingreso">Ingreso:</string>
     <string name="Ingresos">Ingresos:</string>
     <string name="Guardar">Guardar</string>
@@ -114,11 +115,13 @@
     <string name="Modificado">¡Modificado!</string>
     <string name="No_Modificado">No se ha podido modificar</string>
     <string name="Selecciona_categoria">Debe seleccionar una categoría</string>
+    <string name="Selecciona_cuenta">Debe seleccionar una cuenta</string>
     <string name="Creado">¡Creado!</string>
     <string name="No_Creado">No se ha podido crear</string>
     <string name="No_Informes">NO HAY INFORMES ACTUALMENTE</string>
     <string name="No_Movimientos">NO HAY MOVIMIENTOS ACTUALMENTE</string>
     <string name="No_Registros">NO HAY REGISTROS ACTUALMENTE</string>
+    <string name="No_Cuentas">NO HAY CUENTAS ACTUALMENTE</string>
     <string name="OpcionGrafica_Lineal">Gráfica Lineal</string>
     <string name="OpcionGrafica_Barra">Gráfica de Barras</string>
     <!-- VALIDACIONES XML -->
@@ -130,6 +133,7 @@
     <string name="Validacion_Correo_destino">Correo destino requerido</string>
     <string name="Validacion_Correo_envio">Envio de correo no válido, revise su configuracion</string>
     <string name="Validacion_Correo_ok">Envio de correo válido</string>
+    <string name="Validacion_Numero">Debe incluir el número de cuenta</string>
     <!-- grupos de gastos -->
     <string name="Grupo_facturas">Facturas</string>
     <string name="Grupo_alimentacion">Alimentación</string>

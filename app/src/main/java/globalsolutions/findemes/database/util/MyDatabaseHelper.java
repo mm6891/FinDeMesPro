@@ -32,7 +32,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "fecha TIMESTAMP NOT NULL DEFAULT current_timestamp," +
                     "_idRegistro integer," +
                     "grupogasto text not null," +
-                    "  FOREIGN KEY(grupogasto) REFERENCES Grupo_Gastos(_id));";
+                    "  FOREIGN KEY(grupogasto) REFERENCES Grupo_Gastos(_id)," +
+                    "cuenta text not null," +
+                    "  FOREIGN KEY(cuenta) REFERENCES Cuentas(_id)" +
+                    ");";
 
     private static final String CREATE_TABLE_GRUPO_GASTOS =
             "create table Grupo_Gastos( _id integer primary key," +
@@ -47,7 +50,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "grupoingreso text not null," +
                     "_idCuenta integer not null," +
                     "  FOREIGN KEY(grupoingreso) REFERENCES Grupo_Ingresos(_id)," +
-                    "  FOREIGN KEY(_idCuenta) REFERENCES Cuentas(_id));";
+                    "cuenta text not null," +
+                    "  FOREIGN KEY(cuenta) REFERENCES Cuentas(_id)" +
+                    ");";
 
     private static final String CREATE_TABLE_GRUPO_INGRESOS =
             "create table Grupo_Ingresos( _id integer primary key," +

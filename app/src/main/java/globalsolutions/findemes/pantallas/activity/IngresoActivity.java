@@ -22,8 +22,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import globalsolutions.findemes.R;
+import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GrupoIngresoDAO;
 import globalsolutions.findemes.database.dao.IngresoDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.GrupoIngreso;
 import globalsolutions.findemes.database.model.Ingreso;
 import globalsolutions.findemes.pantallas.fragment.DatePickerFragment;
@@ -47,6 +49,19 @@ public class IngresoActivity extends FragmentActivity implements DatePickerDialo
 
         //establecemos listener de limitador de digitos
         ((EditText) findViewById(R.id.txtIngreso)).setKeyListener(new MoneyValueFilter());
+
+        //cargamos el combo de cuentas
+        Spinner cuenta = (Spinner) findViewById(R.id.spCuentaIngresoAc);
+
+        List<Cuenta> listCuentas = new ArrayList<Cuenta>();
+        CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
+        Cuenta[] cuentasArray = cuentaDAO.selectCuentas();
+        listCuentas = Arrays.asList(cuentasArray);
+
+        ArrayAdapter<Cuenta> cuentaAdapter = new ArrayAdapter<Cuenta>(this,
+                android.R.layout.simple_spinner_item, listCuentas);
+        cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cuenta.setAdapter(cuentaAdapter);
 
         //cargamos el combo de categorias
         Spinner categoria = (Spinner) findViewById(R.id.spCategoriaIngreso);
@@ -102,6 +117,12 @@ public class IngresoActivity extends FragmentActivity implements DatePickerDialo
             ((EditText) findViewById(R.id.txtDecripcion)).setError(getResources().getString(R.string.Validacion_Descripcion));
             return;
         }
+        //obtenemos cuenta
+        Cuenta cuenta = (Cuenta)((Spinner) findViewById(R.id.spCuentaIngresoAc)).getSelectedItem();
+        if( cuenta == null) {
+            Util.showToast(view.getContext(), getResources().getString(R.string.Selecciona_cuenta));
+            return;
+        }
         //obtenemos categoria de ingreso
         String categoriaIngreso = (String)((Spinner) findViewById(R.id.spCategoriaIngreso)).getSelectedItem();
         if(categoriaIngreso != null && !categoriaIngreso.isEmpty()) {
@@ -111,6 +132,10 @@ public class IngresoActivity extends FragmentActivity implements DatePickerDialo
             String fecha = (String) ((TextView) findViewById(R.id.tvDiaAI)).getText();
             String hora = (String) ((TextView) findViewById(R.id.tvHoraAI)).getText();
             nuevoIngreso.setFecha(fecha + " " + hora);
+
+            //cuenta a la que cargamos el gasto
+            Cuenta cuentaIngreso = (Cuenta)((Spinner) findViewById(R.id.spCuentaIngresoAc)).getSelectedItem();
+            nuevoIngreso.setCuenta(cuentaIngreso);
 
             GrupoIngreso grupo = new GrupoIngreso();
             grupo.setGrupo(categoriaIngreso);
