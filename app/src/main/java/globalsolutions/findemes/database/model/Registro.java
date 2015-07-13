@@ -13,6 +13,15 @@ public class Registro {
     String grupo;
     Integer activo;
     String fecha;
+    Cuenta cuenta;
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
 
     public Integer getActivo() {
         return activo;

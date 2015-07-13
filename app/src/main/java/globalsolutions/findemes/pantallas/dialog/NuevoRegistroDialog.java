@@ -31,6 +31,7 @@ import globalsolutions.findemes.database.dao.GrupoGastoDAO;
 import globalsolutions.findemes.database.dao.GrupoIngresoDAO;
 import globalsolutions.findemes.database.dao.MovimientoDAO;
 import globalsolutions.findemes.database.dao.RegistroDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.Registro;
 import globalsolutions.findemes.database.util.Constantes;
 import globalsolutions.findemes.pantallas.fragment.DatePickerFragment;
@@ -128,6 +129,12 @@ public class NuevoRegistroDialog extends DialogFragment implements DatePickerDia
                 String descripcion = (String)((EditText) view.findViewById(R.id.txtRegistro)).getText().toString();
                 if(descripcion == null || descripcion.isEmpty()) {
                     ((EditText) view.findViewById(R.id.txtRegistro)).setError(getResources().getString(R.string.Validacion_Nombre));
+                    return;
+                }
+                //obtenemos cuenta
+                Cuenta cuenta = (Cuenta)((Spinner) view.findViewById(R.id.spCuentaRegistro)).getSelectedItem();
+                if( cuenta == null){
+                    Util.showToast(view.getContext(), getResources().getString(R.string.Selecciona_cuenta));
                     return;
                 }
 

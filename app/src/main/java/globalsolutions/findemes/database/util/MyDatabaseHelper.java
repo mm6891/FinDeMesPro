@@ -66,7 +66,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "valor text not null," +
                     "grupo text not null," +
                     "activo integer not null," +
-                    "fecha TIMESTAMP NOT NULL DEFAULT current_timestamp);";
+                    "fecha TIMESTAMP NOT NULL DEFAULT current_timestamp," +
+                    "cuenta text not null," +
+                    "  FOREIGN KEY(cuenta) REFERENCES Cuentas(_id)" +
+                    ");";
 
     private static final String CREATE_TABLE_PASSWORD =
             "create table Password( _id integer primary key," +

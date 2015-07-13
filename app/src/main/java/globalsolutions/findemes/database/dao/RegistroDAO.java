@@ -31,6 +31,7 @@ public class RegistroDAO {
     public final static String REGISTROS_GRUPO="grupo";  // grupo al que pertenece el registro
     public final static String REGISTROS_ACTIVO="activo";  // indicador 0/1 si el registro esta activado o no
     public final static String REGISTROS_FECHA="fecha";  // fecha activacion del registro
+    public final static String REGISTROS_CUENTA_ID="cuenta";  // fecha activacion del registro
 
     /**
      *
@@ -50,6 +51,7 @@ public class RegistroDAO {
         values.put(REGISTROS_GRUPO, registro.getGrupo());
         values.put(REGISTROS_ACTIVO, registro.getActivo());
         values.put(REGISTROS_FECHA, registro.getFecha());
+        values.put(REGISTROS_CUENTA_ID, registro.getCuenta().get_id());
 
         return database.insert(REGISTROS_TABLA, null, values);
     }

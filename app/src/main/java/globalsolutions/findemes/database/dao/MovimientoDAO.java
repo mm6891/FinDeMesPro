@@ -45,6 +45,7 @@ public class MovimientoDAO {
             m.setCategoria(gastos[i].getGrupoGasto().getGrupo());
             m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
             m.set_idRegistro(gastos[i].get_idRegistro());
+            m.setCuenta(gastos[i].getCuenta());
             movsArray[i] = m;
         }
         for(int j = 0 ; j < ingresos.length ; j++){
@@ -56,6 +57,7 @@ public class MovimientoDAO {
             m.setCategoria(ingresos[j].getGrupoIngreso().getGrupo());
             m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
             m.set_idRegistro(ingresos[j].get_idRegistro());
+            m.setCuenta(ingresos[j].getCuenta());
             movsArray[gastos.length + j] = m;
         }
 
@@ -77,7 +79,7 @@ public class MovimientoDAO {
         return movs;
     }
 
-    public ArrayList<MovimientoItem> cargaMovimientosByRegistro(final Context context, int registroID){
+    /*public ArrayList<MovimientoItem> cargaMovimientosByRegistro(final Context context, int registroID){
         MovimientoItem[] movsArray;
         Gasto[] gastos = new GastoDAO(context).selectGastosByRegistroID(registroID);
         Ingreso[] ingresos = new IngresoDAO(context).selectIngresosByRegistroID(registroID);
@@ -91,6 +93,7 @@ public class MovimientoDAO {
             m.setFecha(gastos[i].getFecha());
             m.setCategoria(gastos[i].getGrupoGasto().getGrupo());
             m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
+            m.setCuenta(gastos[i].getCuenta());
             movsArray[i] = m;
         }
         for(int j = 0 ; j < ingresos.length ; j++){
@@ -101,6 +104,7 @@ public class MovimientoDAO {
             m.setFecha(ingresos[j].getFecha());
             m.setCategoria(ingresos[j].getGrupoIngreso().getGrupo());
             m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
+            m.setCuenta(ingresos[j].getCuenta());
             movsArray[gastos.length + j] = m;
         }
 
@@ -120,7 +124,7 @@ public class MovimientoDAO {
         });
 
         return movs;
-    }
+    }*/
 
     private void tratarRegistros(Registro[] registros, Context context){
         //ArrayList<MovimientoItem> ret = new ArrayList<MovimientoItem>();

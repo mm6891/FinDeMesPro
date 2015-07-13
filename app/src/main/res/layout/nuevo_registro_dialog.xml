@@ -74,6 +74,26 @@
         android:orientation="horizontal"
         android:layout_below="@+id/lyLinear3">
         <TextView
+            android:id="@+id/tvCuentaRegistro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Cuenta"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+        <Spinner android:id="@+id/spCuentaRegistro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyLinear5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/lyLinear4">
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Categoria"
@@ -87,11 +107,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lyLinear5"
+        android:id="@+id/lyLinear6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear4">
+        android:layout_below="@+id/lyLinear5">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -110,11 +130,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lyLinear6"
+        android:id="@+id/lyLinear7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear5">
+        android:layout_below="@+id/lyLinear6">
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -133,11 +153,11 @@
         </RadioGroup>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/lyLinear7"
+        android:id="@+id/lyLinear8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear6">
+        android:layout_below="@+id/lyLinear7">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -147,11 +167,11 @@
             android:layout_weight="1"/>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/lyLinear8"
+        android:id="@+id/lyLinear9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/lyLinear7">
+        android:layout_below="@+id/lyLinear8">
         <TextView
             android:id="@+id/tvDiaNR"
             android:layout_width="match_parent"
@@ -176,13 +196,13 @@
             android:background="@android:color/white" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/lyLinear9"
+        android:id="@+id/lyLinear10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/margin"
         android:gravity="center"
-        android:layout_below="@+id/lyLinear8">
+        android:layout_below="@+id/lyLinear9">
         <ImageButton
             android:id="@+id/btnCrearRegistro"
             android:background="@android:color/white"
