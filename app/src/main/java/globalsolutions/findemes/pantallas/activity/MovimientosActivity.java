@@ -24,6 +24,7 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         if(result.equals(String.valueOf(Activity.RESULT_OK))){
             ((MovimientoAdapter)listViewMovs.getAdapter()).setMesSeleccionado(spFiltroMes.getSelectedItemPosition());
             ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(devuelveAnyo());
+            ((MovimientoAdapter)listViewMovs.getAdapter()).setIdCuentaSeleccionada(devuelveCuentaID());
 
             if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
                 ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO) + ";"
@@ -74,6 +76,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         if(result.equals(String.valueOf(Activity.RESULT_OK))){
             ((MovimientoAdapter)listViewMovs.getAdapter()).setMesSeleccionado(spFiltroMes.getSelectedItemPosition());
             ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(devuelveAnyo());
+            ((MovimientoAdapter)listViewMovs.getAdapter()).setIdCuentaSeleccionada(devuelveCuentaID());
 
             if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
                 ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO) + ";" + editText);
@@ -159,8 +162,10 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
             spinnerMap.put(listCuentas.get(i).getNombre(),listCuentas.get(i).get_id());
             spinnerArray[i] = listCuentas.get(i).getNombre();
         }
+        ArrayList<String> arrayAdapterCuentas = (ArrayList<String>) Arrays.asList(spinnerArray);
+        arrayAdapterCuentas.add(getResources().getString(R.string.TIPO_FILTRO_RESETEO));
         ArrayAdapter<String> cuentaAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, spinnerArray);
+                android.R.layout.simple_spinner_item, arrayAdapterCuentas);
         cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCuenta.setAdapter(cuentaAdapter);
         mSpinnerCount++;
@@ -169,7 +174,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
                 if (mSpinnerInitializedCount < mSpinnerCount) {
                     mSpinnerInitializedCount++;
                 } else {
-                    //filtraMesAnyo(view, spFiltroMes.getSelectedItemPosition(), devuelveAnyo());
+                    filtraMesAnyo(view, spFiltroMes.getSelectedItemPosition(), devuelveAnyo());
                 }
             }
 
@@ -208,6 +213,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         });
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+        spCuenta.setSelection(prefs.getInt("spCuenta", arrayAdapterCuentas.size() - 1));
         spFiltroMes.setSelection(prefs.getInt("spFiltroMes", meses.length - 1));
         if(anyos.size() > 1)
             spFitroAnyo.setSelection(prefs.getInt("spFitroAnyo", anyos.size() - 1));
@@ -347,6 +353,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         int anyo = devuelveAnyo();
         ((MovimientoAdapter)listViewMovs.getAdapter()).setMesSeleccionado(mes);
         ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(anyo);
+        ((MovimientoAdapter)listViewMovs.getAdapter()).setIdCuentaSeleccionada(devuelveCuentaID());
 
         ((CheckBox) findViewById(R.id.cbIconPlus)).setChecked(false);
         spFiltroCategoria.setEnabled(((CheckBox) findViewById(R.id.cbIconMinus)).isChecked());
@@ -374,6 +381,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         int anyo = devuelveAnyo();
         ((MovimientoAdapter)listViewMovs.getAdapter()).setMesSeleccionado(mes);
         ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(anyo);
+        ((MovimientoAdapter)listViewMovs.getAdapter()).setIdCuentaSeleccionada(devuelveCuentaID());
 
         ((CheckBox) findViewById(R.id.cbIconMinus)).setChecked(false);
         spFiltroCategoria.setEnabled(((CheckBox) findViewById(R.id.cbIconPlus)).isChecked());
@@ -387,6 +395,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
     public void filtraMesAnyo(View v, int mes, int anyo){
         ((MovimientoAdapter)listViewMovs.getAdapter()).setMesSeleccionado(mes);
         ((MovimientoAdapter)listViewMovs.getAdapter()).setAnyoSeleccionado(anyo);
+        ((MovimientoAdapter)listViewMovs.getAdapter()).setIdCuentaSeleccionada(devuelveCuentaID());
 
         if(!((CheckBox) findViewById(R.id.cbIconMinus)).isChecked() && ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked())
             ((MovimientoAdapter) listViewMovs.getAdapter()).getFilter().filter(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO) +
@@ -419,6 +428,12 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
             anyoSpinner = Constantes.NUMERO_ANYO_TODO;
         }
         return anyoSpinner;
+    }
+
+    public int devuelveCuentaID(){
+        String name = spCuenta.getSelectedItem().toString();
+        Integer id = spinnerMap.get(name);
+        return id.intValue();
     }
 
     @Override

@@ -49,6 +49,16 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
         this.anyoSeleccionado = anyoSeleccionado;
     }
 
+    private int idCuentaSeleccionada;
+
+    public int getIdCuentaSeleccionada() {
+        return idCuentaSeleccionada;
+    }
+
+    public void setIdCuentaSeleccionada(int idCuentaSeleccionada) {
+        this.idCuentaSeleccionada = idCuentaSeleccionada;
+    }
+
     public String getCategoriaSeleccionada() {
         return categoriaSeleccionada;
     }
@@ -139,6 +149,7 @@ public class MovimientoAdapter extends BaseAdapter implements Filterable {
                 String filterableEditText = "";
                 int mesSeleccionado1 = getMesSeleccionado();
                 int anyoSeleccionado = getAnyoSeleccionado();
+                int idCuentaSeleccionada = getIdCuentaSeleccionada();
 
                 items = new MovimientoDAO().cargaMovimientos(context);
                 final ArrayList<MovimientoItem> list = items;
