@@ -19,6 +19,15 @@ public class RegistroItem {
     String tipo;
     String valor;
     String grupo;
+    int _idCuenta;
+
+    public int get_idCuenta() {
+        return _idCuenta;
+    }
+
+    public void set_idCuenta(int _idCuenta) {
+        this._idCuenta = _idCuenta;
+    }
 
     public Integer getActivo() {
         return activo;

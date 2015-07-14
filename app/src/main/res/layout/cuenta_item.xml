@@ -15,12 +15,14 @@
             android:layout_height="wrap_content"
             android:text="@string/NombreCuenta"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_size"
             />
         <TextView
             android:id="@+id/tvNombreCuenta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="@dimen/text_size"
             />
@@ -36,6 +38,7 @@
             android:layout_height="wrap_content"
             android:text="@string/NumeroCuenta"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_size"
             />
         <TextView
@@ -43,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_size"
             />
     </LinearLayout>
@@ -57,6 +61,7 @@
             android:layout_height="wrap_content"
             android:text="@string/FechaCuenta"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_size"
             />
         <TextView
@@ -64,6 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_size"
             />
     </LinearLayout>

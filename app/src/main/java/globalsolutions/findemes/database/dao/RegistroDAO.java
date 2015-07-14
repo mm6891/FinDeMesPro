@@ -31,7 +31,7 @@ public class RegistroDAO {
     public final static String REGISTROS_GRUPO="grupo";  // grupo al que pertenece el registro
     public final static String REGISTROS_ACTIVO="activo";  // indicador 0/1 si el registro esta activado o no
     public final static String REGISTROS_FECHA="fecha";  // fecha activacion del registro
-    public final static String REGISTROS_CUENTA_ID="cuenta";  // fecha activacion del registro
+    public final static String REGISTROS_CUENTA_ID="_idCuenta";  // id value for cuenta
 
     /**
      *
@@ -51,14 +51,15 @@ public class RegistroDAO {
         values.put(REGISTROS_GRUPO, registro.getGrupo());
         values.put(REGISTROS_ACTIVO, registro.getActivo());
         values.put(REGISTROS_FECHA, registro.getFecha());
-        values.put(REGISTROS_CUENTA_ID, registro.getCuenta().get_id());
+        values.put(REGISTROS_CUENTA_ID, registro.get_idCuenta());
 
         return database.insert(REGISTROS_TABLA, null, values);
     }
 
     public Registro[] selectRegistros() {
         Registro[] ret;
-        String[] cols = new String[] {REGISTROS_ID,REGISTROS_DESC, REGISTROS_PERIOD, REGISTROS_TIPO,REGISTROS_VALOR,REGISTROS_GRUPO,REGISTROS_ACTIVO,REGISTROS_FECHA};
+        String[] cols = new String[] {REGISTROS_ID,REGISTROS_DESC, REGISTROS_PERIOD, REGISTROS_TIPO,REGISTROS_VALOR,REGISTROS_GRUPO,
+                REGISTROS_ACTIVO,REGISTROS_FECHA,REGISTROS_CUENTA_ID};
         Cursor mCursor = database.query(true, REGISTROS_TABLA,cols,null
                 , null, null, null, null, null);
         ret = new Registro[mCursor.getCount()];
@@ -74,7 +75,36 @@ public class RegistroDAO {
             nuevoRegistro.setGrupo(mCursor.getString(5));
             nuevoRegistro.setActivo(Integer.valueOf(mCursor.getInt(6)));
             nuevoRegistro.setFecha(mCursor.getString(7));
+            nuevoRegistro.set_idCuenta(mCursor.getInt(8));
 
+            ret[i] = nuevoRegistro;
+            i++;
+            mCursor.moveToNext();
+        }
+        return ret; // iterate to get each value.
+    }
+
+    public Registro[] selectRegistrosByCuenta(int idCuenta) {
+        Registro[] ret;
+        String[] cols = new String[] {REGISTROS_ID,REGISTROS_DESC, REGISTROS_PERIOD, REGISTROS_TIPO,REGISTROS_VALOR,REGISTROS_GRUPO,
+                REGISTROS_ACTIVO,REGISTROS_FECHA,REGISTROS_CUENTA_ID};
+        String[] args = new String[]{String.valueOf(idCuenta)};
+        Cursor mCursor = database.query(true, REGISTROS_TABLA,cols,REGISTROS_CUENTA_ID + "=?"
+                , args, null, null, null, null);
+        ret = new Registro[mCursor.getCount()];
+        int i = 0;
+        mCursor.moveToFirst();
+        while (mCursor.isAfterLast() == false) {
+            Registro nuevoRegistro = new Registro();
+            nuevoRegistro.set_id(mCursor.getInt(0));
+            nuevoRegistro.setDescripcion(mCursor.getString(1));
+            nuevoRegistro.setPeriodicidad(mCursor.getString(2));
+            nuevoRegistro.setTipo(mCursor.getString(3));
+            nuevoRegistro.setValor(mCursor.getString(4));
+            nuevoRegistro.setGrupo(mCursor.getString(5));
+            nuevoRegistro.setActivo(Integer.valueOf(mCursor.getInt(6)));
+            nuevoRegistro.setFecha(mCursor.getString(7));
+            nuevoRegistro.set_idCuenta(mCursor.getInt(8));
 
             ret[i] = nuevoRegistro;
             i++;
@@ -85,7 +115,8 @@ public class RegistroDAO {
 
     public ArrayList<RegistroItem> selectRegistrosItems() {
         ArrayList<RegistroItem> ret;
-        String[] cols = new String[] {REGISTROS_ID,REGISTROS_DESC, REGISTROS_PERIOD, REGISTROS_TIPO,REGISTROS_VALOR,REGISTROS_GRUPO,REGISTROS_ACTIVO,REGISTROS_FECHA};
+        String[] cols = new String[] {REGISTROS_ID,REGISTROS_DESC, REGISTROS_PERIOD, REGISTROS_TIPO,REGISTROS_VALOR,REGISTROS_GRUPO,REGISTROS_ACTIVO,
+                REGISTROS_FECHA,REGISTROS_CUENTA_ID};
         Cursor mCursor = database.query(true, REGISTROS_TABLA,cols,null
                 , null, null, null, null, null);
         ret = new ArrayList<RegistroItem>(mCursor.getCount());
@@ -101,6 +132,7 @@ public class RegistroDAO {
             nuevoRegistro.setGrupo(mCursor.getString(5));
             nuevoRegistro.setActivo(Integer.valueOf(mCursor.getInt(6)));
             nuevoRegistro.setFecha(mCursor.getString(7));
+            nuevoRegistro.set_idCuenta(mCursor.getInt(8));
 
             ret.add(nuevoRegistro);
             i++;
@@ -127,6 +159,7 @@ public class RegistroDAO {
         valores.put(REGISTROS_GRUPO,nuevo.getGrupo());
         valores.put(REGISTROS_ACTIVO,nuevo.getActivo());
         valores.put(REGISTROS_FECHA,nuevo.getFecha());
+        valores.put(REGISTROS_CUENTA_ID,nuevo.get_idCuenta());
 
         int rows = database.update(REGISTROS_TABLA,valores,REGISTROS_ID + "=?",args);
         return rows > 0;

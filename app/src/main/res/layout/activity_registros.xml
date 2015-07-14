@@ -28,29 +28,20 @@
             android:layout_marginLeft="@dimen/margin"
             android:textStyle="bold" />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/lyLinear0"
+    <ListView
+        android:id="@+id/listViewReg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/margin"
-        android:gravity="center"
+        android:layout_height="match_parent"
         android:layout_below="@+id/lyBackButton"
-        android:weightSum="1">
-        <ImageButton
+        android:layout_above="@+id/btnNuevoRegistro"
+        android:textColor="@android:color/black" />
+    <ImageButton
             android:id="@+id/btnNuevoRegistro"
             android:background="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/newregistry"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
             />
-    </LinearLayout>
-    <ListView
-        android:id="@+id/listViewReg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/lyLinear0"
-        android:layout_marginTop="@dimen/margin"
-        android:layout_weight="1"
-        android:textColor="@android:color/black" />
 </RelativeLayout>

@@ -45,7 +45,7 @@ public class MovimientoDAO {
             m.setCategoria(gastos[i].getGrupoGasto().getGrupo());
             m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
             m.set_idRegistro(gastos[i].get_idRegistro());
-            m.setCuenta(gastos[i].getCuenta());
+            m.set_idCuenta(gastos[i].get_idCuenta());
             movsArray[i] = m;
         }
         for(int j = 0 ; j < ingresos.length ; j++){
@@ -57,7 +57,61 @@ public class MovimientoDAO {
             m.setCategoria(ingresos[j].getGrupoIngreso().getGrupo());
             m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
             m.set_idRegistro(ingresos[j].get_idRegistro());
-            m.setCuenta(ingresos[j].getCuenta());
+            m.set_idCuenta(ingresos[j].get_idCuenta());
+            movsArray[gastos.length + j] = m;
+        }
+
+        ArrayList<MovimientoItem> movs = new ArrayList(Arrays.asList(movsArray));
+
+        //ordenamos los movimientos por fecha descendente
+        Collections.sort(movs, new Comparator<MovimientoItem>() {
+            @Override
+            public int compare(MovimientoItem o1, MovimientoItem o2) {
+                try {
+                    return Util.formatoFechaActual().parse(o2.getFecha()).compareTo
+                            (Util.formatoFechaActual().parse(o1.getFecha()));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+
+        return movs;
+    }
+
+    public ArrayList<MovimientoItem> cargaMovimientosByCuenta(final Context context, int idCuenta){
+        MovimientoItem[] movsArray;
+
+        //tratamos registros posibles
+        Registro[] registros = new RegistroDAO(context).selectRegistrosByCuenta(idCuenta);
+        tratarRegistros(registros,context);
+
+        Gasto[] gastos = new GastoDAO(context).selectGastosByCuenta(idCuenta);
+        Ingreso[] ingresos = new IngresoDAO(context).selectIngresosByCuentaID(idCuenta);
+
+        movsArray = new MovimientoItem[gastos.length + ingresos.length];
+        for(int i = 0 ; i < gastos.length ; i++){
+            MovimientoItem m = new MovimientoItem();
+            m.set_id(gastos[i].get_id());
+            m.setValor(gastos[i].getValor());
+            m.setDescripcion(gastos[i].getDescripcion());
+            m.setFecha(gastos[i].getFecha());
+            m.setCategoria(gastos[i].getGrupoGasto().getGrupo());
+            m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO));
+            m.set_idRegistro(gastos[i].get_idRegistro());
+            m.set_idCuenta(gastos[i].get_idCuenta());
+            movsArray[i] = m;
+        }
+        for(int j = 0 ; j < ingresos.length ; j++){
+            MovimientoItem m = new MovimientoItem();
+            m.set_id(ingresos[j].get_id());
+            m.setValor(ingresos[j].getValor());
+            m.setDescripcion(ingresos[j].getDescripcion());
+            m.setFecha(ingresos[j].getFecha());
+            m.setCategoria(ingresos[j].getGrupoIngreso().getGrupo());
+            m.setTipoMovimiento(context.getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO));
+            m.set_idRegistro(ingresos[j].get_idRegistro());
+            m.set_idCuenta(ingresos[j].get_idCuenta());
             movsArray[gastos.length + j] = m;
         }
 
@@ -377,6 +431,7 @@ public class MovimientoDAO {
         g.setGrupo(registro.getGrupo());
         ingreso.setGrupoIngreso(g);
         ingreso.set_idRegistro(registro.get_id());
+        ingreso.set_idCuenta(registro.get_idCuenta());
         return ingreso;
     }
     private Gasto creaGasto(Registro registro, String fechaActivacion){
@@ -390,6 +445,7 @@ public class MovimientoDAO {
         g.setGrupo(registro.getGrupo());
         gasto.setGrupoGasto(g);
         gasto.set_idRegistro(registro.get_id());
+        gasto.set_idCuenta(registro.get_idCuenta());
         return gasto;
     }
 }

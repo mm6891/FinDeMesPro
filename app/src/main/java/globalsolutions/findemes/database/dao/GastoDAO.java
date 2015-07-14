@@ -27,6 +27,7 @@ public class GastoDAO {
     public final static String GASTOS_FECHA="fecha";  // fecha del gasto
     public final static String GASTOS_GRUPO="grupogasto";  // grupo al que pertenece el gasto, referencia
     public final static String GASTOS_REGISTRO_ID="_idRegistro"; // id value for registro
+    public final static String GASTOS_CUENTA_ID="_idCuenta"; // id value for cuenta
 
     /**
      *
@@ -44,13 +45,14 @@ public class GastoDAO {
         values.put(GASTOS_GRUPO, gasto.getGrupoGasto().getGrupo());
         values.put(GASTOS_FECHA, gasto.getFecha());
         values.put(GASTOS_REGISTRO_ID, gasto.get_idRegistro());
+        values.put(GASTOS_CUENTA_ID, gasto.get_idCuenta());
 
         return database.insert(GASTOS_TABLA, null, values);
     }
 
     public Gasto[] selectGastos() {
         Gasto[] ret;
-        String[] cols = new String[] {GASTOS_ID,GASTOS_GRUPO, GASTOS_DESC, GASTOS_VALOR,GASTOS_FECHA,GASTOS_REGISTRO_ID};
+        String[] cols = new String[] {GASTOS_ID,GASTOS_GRUPO, GASTOS_DESC, GASTOS_VALOR,GASTOS_FECHA,GASTOS_REGISTRO_ID,GASTOS_CUENTA_ID};
         Cursor mCursor = database.query(true, GASTOS_TABLA,cols,null
                 , null, null, null, null, null);
         ret = new Gasto[mCursor.getCount()];
@@ -66,6 +68,7 @@ public class GastoDAO {
             nuevoGasto.setValor(mCursor.getString(3));
             nuevoGasto.setFecha(mCursor.getString(4));
             nuevoGasto.set_idRegistro(mCursor.getInt(5));
+            nuevoGasto.set_idCuenta(mCursor.getInt(6));
 
             ret[i] = nuevoGasto;
             i++;
@@ -74,9 +77,37 @@ public class GastoDAO {
         return ret; // iterate to get each value.
     }
 
-    public Gasto[] selectGastosByRegistroID(int registroID) {
+    public Gasto[] selectGastosByCuenta(int cuentaID) {
         Gasto[] ret;
-        String[] cols = new String[] {GASTOS_ID,GASTOS_GRUPO, GASTOS_DESC, GASTOS_VALOR,GASTOS_FECHA,GASTOS_REGISTRO_ID};
+        String[] cols = new String[] {GASTOS_ID,GASTOS_GRUPO, GASTOS_DESC, GASTOS_VALOR,GASTOS_FECHA,GASTOS_REGISTRO_ID,GASTOS_CUENTA_ID};
+        String[] args = new String[]{String.valueOf(cuentaID)};
+        Cursor mCursor = database.query(true, GASTOS_TABLA,cols,GASTOS_CUENTA_ID + "=?"
+                , args, null, null, null, null);
+        ret = new Gasto[mCursor.getCount()];
+        int i = 0;
+        mCursor.moveToFirst();
+        while (mCursor.isAfterLast() == false) {
+            Gasto nuevoGasto = new Gasto();
+            nuevoGasto.set_id(mCursor.getInt(0));
+            GrupoGasto categoria = new GrupoGasto();
+            categoria.setGrupo(mCursor.getString(1));
+            nuevoGasto.setGrupoGasto(categoria);
+            nuevoGasto.setDescripcion(mCursor.getString(2));
+            nuevoGasto.setValor(mCursor.getString(3));
+            nuevoGasto.setFecha(mCursor.getString(4));
+            nuevoGasto.set_idRegistro(mCursor.getInt(5));
+            nuevoGasto.set_idCuenta(mCursor.getInt(6));
+
+            ret[i] = nuevoGasto;
+            i++;
+            mCursor.moveToNext();
+        }
+        return ret; // iterate to get each value.
+    }
+
+   /* public Gasto[] selectGastosByRegistroID(int registroID) {
+        Gasto[] ret;
+        String[] cols = new String[] {GASTOS_ID,GASTOS_GRUPO, GASTOS_DESC, GASTOS_VALOR,GASTOS_FECHA,GASTOS_REGISTRO_ID,GASTOS_CUENTA_ID};
         String[] args = new String[]{String.valueOf(registroID)};
         Cursor mCursor = database.query(true, GASTOS_TABLA,cols,GASTOS_REGISTRO_ID + "=?"
                 , args, null, null, null, null);
@@ -93,13 +124,14 @@ public class GastoDAO {
             nuevoGasto.setValor(mCursor.getString(3));
             nuevoGasto.setFecha(mCursor.getString(4));
             nuevoGasto.set_idRegistro(mCursor.getInt(5));
+            nuevoGasto.set_idCuenta(mCursor.getInt(6));
 
             ret[i] = nuevoGasto;
             i++;
             mCursor.moveToNext();
         }
         return ret; // iterate to get each value.
-    }
+    }*/
 
     public boolean deleteGasto(int _id){
 
@@ -116,6 +148,7 @@ public class GastoDAO {
         valores.put(GASTOS_DESC,nuevo.getDescripcion());
         valores.put(GASTOS_VALOR,nuevo.getValor());
         valores.put(GASTOS_FECHA,nuevo.getFecha());
+        valores.put(GASTOS_CUENTA_ID,nuevo.get_idCuenta());
 
         int rows = database.update(GASTOS_TABLA,valores,GASTOS_ID + "=?",args);
         return rows > 0;

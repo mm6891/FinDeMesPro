@@ -72,11 +72,10 @@ public class NuevaCuentaDialog extends DialogFragment {
                     return;
                 }
                 String numero = (String)((EditText) view.findViewById(R.id.etNumeroCuentaDialog)).getText().toString();
-                if(numero == null || numero.isEmpty()) {
+                if(numero == null || numero.isEmpty() || numero.trim().length() != 20) {
                     ((EditText) view.findViewById(R.id.etNumeroCuentaDialog)).setError(getResources().getString(R.string.Validacion_Numero));
                     return;
                 }
-
 
                 Cuenta nuevaCuenta = new Cuenta();
                 nuevaCuenta.setNombre(nombre);

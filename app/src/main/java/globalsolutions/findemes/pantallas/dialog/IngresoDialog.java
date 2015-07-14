@@ -25,11 +25,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import globalsolutions.findemes.R;
+import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GrupoIngresoDAO;
 import globalsolutions.findemes.database.dao.IngresoDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.GrupoIngreso;
 import globalsolutions.findemes.database.model.Ingreso;
 import globalsolutions.findemes.pantallas.util.MoneyValueFilter;
@@ -60,6 +63,9 @@ public class IngresoDialog extends DialogFragment implements DatePickerDialog.On
         public void onIngresoDialogSubmit(String result);
     }
 
+    private Spinner spCuenta;
+    private HashMap<String,Integer> spinnerMap;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,6 +80,26 @@ public class IngresoDialog extends DialogFragment implements DatePickerDialog.On
 
         //establecemos listener de limitador de digitos
         ((EditText) view.findViewById(R.id.txtIngreso)).setKeyListener(new MoneyValueFilter());
+
+        //cargamos el combo de cuentas
+        spCuenta = (Spinner) view.findViewById(R.id.spCuentaIngreso);
+
+        List<Cuenta> listCuentas = new ArrayList<Cuenta>();
+        CuentaDAO cuentaDAO = new CuentaDAO(view.getContext());
+        Cuenta[] cuentasArray = cuentaDAO.selectCuentas();
+        listCuentas = Arrays.asList(cuentasArray);
+
+        String[] spinnerArray = new String[listCuentas.size()];
+        spinnerMap = new HashMap<String,Integer>();
+        for (int i = 0; i < listCuentas.size(); i++)
+        {
+            spinnerMap.put(listCuentas.get(i).getNombre(),listCuentas.get(i).get_id());
+            spinnerArray[i] = listCuentas.get(i).getNombre();
+        }
+        ArrayAdapter<String> cuentaAdapter = new ArrayAdapter<String>(view.getContext(),
+                android.R.layout.simple_spinner_item, spinnerArray);
+        cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCuenta.setAdapter(cuentaAdapter);
 
         //cargamos el combo de categorias
         Spinner categoria = (Spinner) view.findViewById(R.id.spCategoriaIngreso);
@@ -130,6 +156,12 @@ public class IngresoDialog extends DialogFragment implements DatePickerDialog.On
                     ((EditText) view.findViewById(R.id.txtDecripcion)).setError(getResources().getString(R.string.Validacion_Descripcion));
                     return;
                 }
+                //obtenemos cuenta
+                String cuenta = (String)((Spinner) view.findViewById(R.id.spCuentaIngreso)).getSelectedItem();
+                if( cuenta == null || cuenta.isEmpty()) {
+                    Util.showToast(view.getContext(), getResources().getString(R.string.Selecciona_cuenta));
+                    return;
+                }
                 //obtenemos categoria de ingreso
                 String categoriaIngreso = (String)((Spinner) view.findViewById(R.id.spCategoriaIngreso)).getSelectedItem();
                 if(categoriaIngreso != null && !categoriaIngreso.isEmpty()) {
@@ -139,6 +171,11 @@ public class IngresoDialog extends DialogFragment implements DatePickerDialog.On
                     String fecha = (String) ((TextView) view.findViewById(R.id.tvDiaEI)).getText();
                     String hora = (String) ((TextView) view.findViewById(R.id.tvHoraEI)).getText();
                     nuevoIngreso.setFecha(fecha + " " + hora);
+
+                    //cuenta a la que cargamos el gasto
+                    String name = spCuenta.getSelectedItem().toString();
+                    Integer id = spinnerMap.get(name);
+                    nuevoIngreso.set_idCuenta(id);
 
                     GrupoIngreso grupo = new GrupoIngreso();
                     grupo.setGrupo(categoriaIngreso);

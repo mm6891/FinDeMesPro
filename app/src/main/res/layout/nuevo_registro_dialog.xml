@@ -74,7 +74,6 @@
         android:orientation="horizontal"
         android:layout_below="@+id/lyLinear3">
         <TextView
-            android:id="@+id/tvCuentaRegistro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Cuenta"

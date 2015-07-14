@@ -62,7 +62,6 @@
         android:orientation="horizontal"
         android:layout_below="@+id/lyLinear1">
         <TextView
-            android:id="@+id/tvCuentaGastoAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Cuenta"

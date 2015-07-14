@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import globalsolutions.findemes.R;
@@ -35,6 +36,9 @@ import globalsolutions.findemes.pantallas.util.MoneyValueFilter;
 import globalsolutions.findemes.pantallas.util.Util;
 
 public class GastoActivity extends FragmentActivity implements DatePickerDialog.OnDateSetListener {
+
+    private Spinner spCuenta;
+    private HashMap<String,Integer> spinnerMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +57,23 @@ public class GastoActivity extends FragmentActivity implements DatePickerDialog.
         ((EditText) findViewById(R.id.txtGasto)).setKeyListener(new MoneyValueFilter());
 
         //cargamos el combo de cuentas
-        Spinner cuenta = (Spinner) findViewById(R.id.spCuentaGastoAc);
-
+        spCuenta = (Spinner) findViewById(R.id.spCuentaGastoAc);
         List<Cuenta> listCuentas = new ArrayList<Cuenta>();
         CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
         Cuenta[] cuentasArray = cuentaDAO.selectCuentas();
         listCuentas = Arrays.asList(cuentasArray);
 
-        ArrayAdapter<Cuenta> cuentaAdapter = new ArrayAdapter<Cuenta>(this,
-                android.R.layout.simple_spinner_item, listCuentas);
+        String[] spinnerArray = new String[listCuentas.size()];
+        spinnerMap = new HashMap<String,Integer>();
+        for (int i = 0; i < listCuentas.size(); i++)
+        {
+            spinnerMap.put(listCuentas.get(i).getNombre(),listCuentas.get(i).get_id());
+            spinnerArray[i] = listCuentas.get(i).getNombre();
+        }
+        ArrayAdapter<String> cuentaAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, spinnerArray);
         cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cuenta.setAdapter(cuentaAdapter);
+        spCuenta.setAdapter(cuentaAdapter);
 
         //cargamos el combo de categorias
         Spinner categoria = (Spinner) findViewById(R.id.spCategoriaGasto);
@@ -122,8 +132,8 @@ public class GastoActivity extends FragmentActivity implements DatePickerDialog.
         }
 
         //obtenemos cuenta
-        Cuenta cuenta = (Cuenta)((Spinner) findViewById(R.id.spCuentaGastoAc)).getSelectedItem();
-        if( cuenta == null){
+        String cuenta = (String)((Spinner) findViewById(R.id.spCuentaGastoAc)).getSelectedItem();
+        if( cuenta == null || cuenta.isEmpty()) {
             Util.showToast(view.getContext(),getResources().getString(R.string.Selecciona_cuenta));
             return;
         }
@@ -138,8 +148,9 @@ public class GastoActivity extends FragmentActivity implements DatePickerDialog.
             nuevoGasto.setFecha(fecha + " " + hora);
 
             //cuenta a la que cargamos el gasto
-            Cuenta cuentaGasto = (Cuenta)((Spinner) findViewById(R.id.spCuentaGastoAc)).getSelectedItem();
-            nuevoGasto.setCuenta(cuentaGasto);
+            String name = spCuenta.getSelectedItem().toString();
+            Integer id = spinnerMap.get(name);
+            nuevoGasto.set_idCuenta(id);
 
             GrupoGasto grupo = new GrupoGasto();
             grupo.setGrupo(categoriaGasto);

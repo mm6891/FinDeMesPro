@@ -14,9 +14,12 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
@@ -24,12 +27,17 @@ import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 import globalsolutions.findemes.R;
+import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GrupoGastoDAO;
 import globalsolutions.findemes.database.dao.GrupoIngresoDAO;
 import globalsolutions.findemes.database.dao.MovimientoDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.GrupoGasto;
 import globalsolutions.findemes.database.model.GrupoIngreso;
 import globalsolutions.findemes.database.model.MovimientoItem;
@@ -46,9 +54,16 @@ public class MainActivity extends Activity {
     private Button btnInformes;
     private Button btnMovimientosFrecuentes;
     private Button btnOpciones;
-
     private Button btnCuentas;
     private Button btnObjetivos;
+
+    private Spinner spCuenta;
+    private HashMap<String,Integer> spinnerMap;
+    //this counts how many Spinner's are on the UI
+    private int mSpinnerCount=0;
+
+    //this counts how many Spinner's have been initialized
+    private int mSpinnerInitializedCount=0;
 
     private GridLayout gv;
 
@@ -143,6 +158,28 @@ public class MainActivity extends Activity {
                 finish();
             }
         });
+
+        //cargamos el combo de cuentas
+        spCuenta = (Spinner) findViewById(R.id.spCuentaMain);
+
+        List<Cuenta> listCuentas = new ArrayList<Cuenta>();
+        CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
+        Cuenta[] cuentasArray = cuentaDAO.selectCuentas();
+        listCuentas = Arrays.asList(cuentasArray);
+
+        String[] spinnerArray = new String[listCuentas.size()];
+        spinnerMap = new HashMap<String,Integer>();
+        for (int i = 0; i < listCuentas.size(); i++)
+        {
+            spinnerMap.put(listCuentas.get(i).getNombre(),listCuentas.get(i).get_id());
+            spinnerArray[i] = listCuentas.get(i).getNombre();
+        }
+        ArrayAdapter<String> cuentaAdapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item_2, spinnerArray);
+        cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCuenta.setAdapter(cuentaAdapter);
+        mSpinnerCount++;
+        spCuenta.setOnItemSelectedListener(new cuentaOnClickListener());
 
         //tamanyo de gridlayout segun pantalla en pixeles
         Display display = getWindowManager().getDefaultDisplay();
@@ -240,6 +277,92 @@ public class MainActivity extends Activity {
                 launchCalculator();
             }
         });
+    }
+
+    private class cuentaOnClickListener implements AdapterView.OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View v, int pos,
+                                   long id) {
+
+            if (mSpinnerInitializedCount < mSpinnerCount)
+            {
+                mSpinnerInitializedCount++;
+            }
+            else {
+                String name = spCuenta.getSelectedItem().toString();
+                Integer idCuenta = spinnerMap.get(name);
+                //load resumen
+                //recuperamos movimientos
+                final ArrayList<MovimientoItem> movs = new MovimientoDAO().cargaMovimientosByCuenta(getApplicationContext(),
+                        idCuenta.intValue());
+
+                DecimalFormat df = new DecimalFormat("#.00");
+                df.setMaximumFractionDigits(2);
+                df.setMinimumFractionDigits(0);
+                df.setGroupingUsed(false);
+
+                int mesActual = Calendar.getInstance().get(Calendar.MONTH);
+                int anyoActal = Calendar.getInstance().get(Calendar.YEAR);
+                BigDecimal ingresos = new BigDecimal(0.00);
+                ingresos = ingresos.setScale(2, BigDecimal.ROUND_DOWN);
+                BigDecimal gastos = new BigDecimal(0.00);
+                gastos = gastos.setScale(2, BigDecimal.ROUND_DOWN);
+                BigDecimal saldo = new BigDecimal(0.00);
+
+                for (MovimientoItem mov : movs) {
+                    String fecha = mov.getFecha();
+                    Calendar cal = Calendar.getInstance();
+                    try {
+                        cal.setTime(Util.formatoFechaActual().parse(fecha));
+                    } catch (java.text.ParseException e) {
+                        e.printStackTrace();
+                    }
+                    int mesMovimiento = cal.get(Calendar.MONTH);
+                    int anyoMovimiento = cal.get(Calendar.YEAR);
+                    if (mov.getTipoMovimiento().equals(getResources().getString(R.string.TIPO_MOVIMIENTO_GASTO))
+                            && mesMovimiento == mesActual && anyoActal == anyoMovimiento) {
+                        BigDecimal bdGasto;
+                        try {
+                            if (mov.getValor().contains("."))
+                                bdGasto = BigDecimal.valueOf((Double) df.parse(mov.getValor()));
+                            else
+                                bdGasto = BigDecimal.valueOf((Long) df.parse(mov.getValor()));
+                            gastos = gastos.add(bdGasto);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (mov.getTipoMovimiento().equals(getResources().getString(R.string.TIPO_MOVIMIENTO_INGRESO))
+                            && mesMovimiento == mesActual && anyoActal == anyoMovimiento) {
+                        try {
+                            BigDecimal bdIngreso;
+                            if (mov.getValor().contains("."))
+                                bdIngreso = BigDecimal.valueOf((Double) df.parse(mov.getValor()));
+                            else
+                                bdIngreso = BigDecimal.valueOf((Long) df.parse(mov.getValor()));
+                            ingresos = ingresos.add(bdIngreso);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                tvIngresosValor = (TextView) findViewById(R.id.tvIngresosValor);
+                tvIngresosValor.setText(df.format(ingresos) + Util.formatoMoneda(getApplicationContext()));
+                tvGastosValor = (TextView) findViewById(R.id.tvGastosValor);
+                tvGastosValor.setText(df.format(gastos) + Util.formatoMoneda(getApplicationContext()));
+                saldo = ingresos.subtract(gastos);
+                saldo = saldo.setScale(2, BigDecimal.ROUND_DOWN);
+                tvSaldo = (TextView) findViewById(R.id.tvSaldoValor);
+                tvSaldo.setText(df.format(saldo) + Util.formatoMoneda(getApplicationContext()));
+                tvMes = (TextView) findViewById(R.id.tvMesResumen);
+                tvMes.setText(new DateFormatSymbols().getMonths()[mesActual].toUpperCase());
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+
+        }
     }
 
     public void CreaRegistros(){

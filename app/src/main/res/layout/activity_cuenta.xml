@@ -29,17 +29,6 @@
             android:layout_marginLeft="@dimen/margin"
             android:textStyle="bold" />
     </LinearLayout>
-  <!--  <LinearLayout
-        android:id="@+id/lyLinear1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/lyBackButton">
-        <Spinner android:id="@+id/spCuentas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>-->
     <ListView
         android:id="@+id/listViewCuentas"
         android:layout_width="match_parent"

@@ -40,16 +40,8 @@ import globalsolutions.findemes.pantallas.util.Util;
 public class CuentasActivity extends FragmentActivity implements NuevaCuentaDialog.ONuevaCuentaDialogListener,
         EditCuentaDialog.OnEditCuentaDialogListener{
 
-    private TextView tvNombreCuenta;
-    private TextView tvNumeroCuenta;
-    private TextView tvFechaCuenta;
     private ImageButton btnNuevaCuenta;
     private ListView listViewCuentas;
-
-    //this counts how many Spinner's are on the UI
-    private int mSpinnerCount=0;
-    //this counts how many Spinner's have been initialized
-    private int mSpinnerInitializedCount=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +55,6 @@ public class CuentasActivity extends FragmentActivity implements NuevaCuentaDial
                 backActivity();
             }
         });
-
-
-        tvNombreCuenta = (TextView) findViewById(R.id.tvNombreCuenta);
-        tvNumeroCuenta = (TextView) findViewById(R.id.tvNumeroCuenta);
-        tvFechaCuenta = (TextView) findViewById(R.id.tvFechaCuenta);
 
         btnNuevaCuenta = (ImageButton) findViewById(R.id.btnNuevaCuenta);
         btnNuevaCuenta.setOnClickListener(new View.OnClickListener() {

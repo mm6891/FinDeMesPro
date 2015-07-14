@@ -46,6 +46,10 @@
             android:label="@string/MENU_REGISTROS" >
         </activity>
         <activity
+            android:name=".pantallas.activity.CuentasActivity"
+            android:label="@string/MENU_CUENTAS" >
+        </activity>
+        <activity
             android:name=".pantallas.activity.OptionActivityPassword"
             android:label="@string/OPCIONES_CONTRASENYA" >
         </activity>

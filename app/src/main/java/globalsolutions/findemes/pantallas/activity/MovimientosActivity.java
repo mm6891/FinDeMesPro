@@ -24,14 +24,17 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import globalsolutions.findemes.R;
+import globalsolutions.findemes.database.dao.CuentaDAO;
 import globalsolutions.findemes.database.dao.GastoDAO;
 import globalsolutions.findemes.database.dao.GrupoGastoDAO;
 import globalsolutions.findemes.database.dao.GrupoIngresoDAO;
 import globalsolutions.findemes.database.dao.IngresoDAO;
 import globalsolutions.findemes.database.dao.MovimientoDAO;
+import globalsolutions.findemes.database.model.Cuenta;
 import globalsolutions.findemes.database.model.MovimientoItem;
 import globalsolutions.findemes.database.util.ArrayAdapterWithIcon;
 import globalsolutions.findemes.database.util.Constantes;
@@ -95,6 +98,8 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
     private Spinner spFitroAnyo;
     private Spinner spFiltroCategoria;
     private EditText etSearchbox;
+    private Spinner spCuenta;
+    private HashMap<String,Integer> spinnerMap;
 
 
     //this counts how many Spinner's are on the UI
@@ -139,6 +144,39 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
                 anyos.add(String.valueOf(new Integer(year)));
         }
         anyos.add(getResources().getString(R.string.TIPO_FILTRO_RESETEO));
+
+        //cargamos el combo de cuentas
+        spCuenta = (Spinner) findViewById(R.id.spCuentaMovs);
+        List<Cuenta> listCuentas = new ArrayList<Cuenta>();
+        CuentaDAO cuentaDAO = new CuentaDAO(getApplicationContext());
+        Cuenta[] cuentasArray = cuentaDAO.selectCuentas();
+        listCuentas = Arrays.asList(cuentasArray);
+
+        String[] spinnerArray = new String[listCuentas.size()];
+        spinnerMap = new HashMap<String,Integer>();
+        for (int i = 0; i < listCuentas.size(); i++)
+        {
+            spinnerMap.put(listCuentas.get(i).getNombre(),listCuentas.get(i).get_id());
+            spinnerArray[i] = listCuentas.get(i).getNombre();
+        }
+        ArrayAdapter<String> cuentaAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, spinnerArray);
+        cuentaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCuenta.setAdapter(cuentaAdapter);
+        mSpinnerCount++;
+        spCuenta.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mSpinnerInitializedCount < mSpinnerCount) {
+                    mSpinnerInitializedCount++;
+                } else {
+                    //filtraMesAnyo(view, spFiltroMes.getSelectedItemPosition(), devuelveAnyo());
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         spFitroAnyo.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, anyos));
         mSpinnerCount++;
         spFitroAnyo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -301,7 +339,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         List<String> listCategorias = Arrays.asList(categoriasGastos);
         ArrayAdapter<String> dataAdapterCat = new ArrayAdapter<String>(getApplicationContext(),
                 R.layout.spinner_item, listCategorias);
-        dataAdapterCat.setDropDownViewResource(R.layout.spinner_item);
+        dataAdapterCat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spFiltroCategoria.setAdapter(dataAdapterCat);
         spFiltroCategoria.setSelection(listCategorias.size() - 1);
 
@@ -328,7 +366,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         List<String> listCategorias = Arrays.asList(categoriasIngresos);
         ArrayAdapter<String> dataAdapterCat = new ArrayAdapter<String>(getApplicationContext(),
                 R.layout.spinner_item, listCategorias);
-        dataAdapterCat.setDropDownViewResource(R.layout.spinner_item);
+        dataAdapterCat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spFiltroCategoria.setAdapter(dataAdapterCat);
         spFiltroCategoria.setSelection(listCategorias.size() - 1);
 

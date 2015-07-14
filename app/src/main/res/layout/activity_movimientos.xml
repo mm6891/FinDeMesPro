@@ -30,10 +30,29 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/lyLinearFiltroMov0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_below="@+id/lyBackButton">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Cuenta"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+        <Spinner android:id="@+id/spCuentaMovs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lyLinearFiltroMov1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/lyBackButton">
+        android:layout_below="@+id/lyLinearFiltroMov0">
         <Spinner android:id="@+id/spMeses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/lyLinearFiltroMov0">
+        android:layout_below="@+id/lyLinearFiltroMov1">
         <EditText
             android:id="@+id/etSearchbox"
             android:layout_width="match_parent"
