@@ -162,7 +162,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
             spinnerMap.put(listCuentas.get(i).getNombre(),listCuentas.get(i).get_id());
             spinnerArray[i] = listCuentas.get(i).getNombre();
         }
-        ArrayList<String> arrayAdapterCuentas = (ArrayList<String>) Arrays.asList(spinnerArray);
+        List<String> arrayAdapterCuentas = Arrays.asList(spinnerArray);
         arrayAdapterCuentas.add(getResources().getString(R.string.TIPO_FILTRO_RESETEO));
         ArrayAdapter<String> cuentaAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, arrayAdapterCuentas);
@@ -213,7 +213,7 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         });
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
-        spCuenta.setSelection(prefs.getInt("spCuenta", arrayAdapterCuentas.size() - 1));
+        spCuenta.setSelection(prefs.getInt("spFiltroCuenta", arrayAdapterCuentas.size() - 1));
         spFiltroMes.setSelection(prefs.getInt("spFiltroMes", meses.length - 1));
         if(anyos.size() > 1)
             spFitroAnyo.setSelection(prefs.getInt("spFitroAnyo", anyos.size() - 1));
@@ -450,11 +450,13 @@ public class MovimientosActivity extends FragmentActivity implements GastoDialog
         edit.remove("checkIngresos");
         edit.remove("checkGastos");
         edit.remove("spFiltroCategoria");
+        edit.remove("spFiltroCuenta");
         edit.putInt("spFiltroMes", spFiltroMes.getSelectedItemPosition());
         edit.putInt("spFitroAnyo", spFitroAnyo.getSelectedItemPosition());
         edit.putBoolean("checkIngresos", ((CheckBox) findViewById(R.id.cbIconPlus)).isChecked());
         edit.putBoolean("checkGastos", ((CheckBox) findViewById(R.id.cbIconMinus)).isChecked());
-        edit.putInt("spFiltroCategoria",spFiltroCategoria.getSelectedItemPosition());
+        edit.putInt("spFiltroCategoria", spFiltroCategoria.getSelectedItemPosition());
+        edit.putInt("spFiltroCuenta", spCuenta.getSelectedItemPosition());
         edit.commit();
         super.onSaveInstanceState(outState);
     }
